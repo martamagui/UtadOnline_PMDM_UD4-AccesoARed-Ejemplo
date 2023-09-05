@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph_home">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/advertisementListFragment">
 
+    <fragment
+        android:id="@+id/advertisementListFragment"
+        android:name="com.utad.wallu_tad.ui.fragments.AdvertisementListFragment"
+        android:label="fragment_advertisement_list"
+        tools:layout="@layout/fragment_advertisement_list" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.utad.wallu_tad.ui.fragments.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/newAdvertisementFragment"
+        android:name="com.utad.wallu_tad.ui.fragments.NewAdvertisementFragment"
+        android:label="fragment_new_advertisement"
+        tools:layout="@layout/fragment_new_advertisement" />
 </navigation>

@@ -2,4 +2,28 @@
     <string name="app_name">WallU-Tad</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="login_title">¡Bienvenido, U-Tecky!</string>
+    <string name="login_mail_hint">Dirección de e-mail</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="login_button_description">Acceder a WallU-Tad</string>
+    <string name="login_sign_up_button_description">Todavía no tengo cuenta</string>
+
+    <string name="sign_up_title">Súmate a Wallu-Tad</string>
+    <string name="sign_up_name_hint">Nombre y apellidos</string>
+    <string name="sign_up_mail_hint">Dirección de e-mail</string>
+    <string name="sign_up_password_hint">Contraseña</string>
+    <string name="sign_up_password_description">La contraseña debe contener al menos 6 caracteres.</string>
+    <string name="sign_up_button_description">Crear una cuenta</string>
+
+    <string name="feed_title">Producto cerca de ti</string>
+
+    <string name="advertisement_detail_free_shipping_title">Envío disponible</string>
+    <string name="advertisement_detail_shipping_title">Entrega en 3-7 días</string>
+    <string name="advertisement_detail_shipping_pick_up_description">En un punto de recogida <b>desde 7,50€</b></string>
+    <string name="advertisement_detail_shipping_home_description">En la puerta de casa desde <b>desde 11,00€</b></string>
+
+    <string name="new_advertisement_title">En la puerta de casa desde <b>desde 11,00€</b></string>
+
+
 </resources>
