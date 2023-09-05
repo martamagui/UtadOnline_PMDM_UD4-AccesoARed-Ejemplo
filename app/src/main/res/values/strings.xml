@@ -11,6 +11,7 @@
 
     <string name="sign_up_title">Súmate a Wallu-Tad</string>
     <string name="sign_up_name_hint">Nombre y apellidos</string>
+    <string name="sign_up_user_name_hint">Nombre de usuario</string>
     <string name="sign_up_mail_hint">Dirección de e-mail</string>
     <string name="sign_up_password_hint">Contraseña</string>
     <string name="sign_up_password_description">La contraseña debe contener al menos 6 caracteres.</string>
@@ -24,6 +25,8 @@
     <string name="advertisement_detail_shipping_home_description">En la puerta de casa desde <b>desde 11,00€</b></string>
 
     <string name="new_advertisement_title">En la puerta de casa desde <b>desde 11,00€</b></string>
+
+    <string name="error_message_empty_fields">Por favor, rellena todos los campos.</string>
 
 
 </resources>

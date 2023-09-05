@@ -13,6 +13,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        checkLogin()
+    }
+
+    private fun isUserLogged(): Boolean {
+        return true
+    }
+
+    private fun checkLogin() {
+        if(isUserLogged()){
+
+        }
     }
 
 
