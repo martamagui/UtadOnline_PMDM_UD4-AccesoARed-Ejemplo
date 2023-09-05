@@ -28,5 +28,11 @@
 
     <string name="error_message_empty_fields">Por favor, rellena todos los campos.</string>
 
+    <string name="home_bottom_menu_home_title">Feed</string>
+    <string name="home_bottom_menu_new_advertisement_title">Crear Anuncio</string>
+    <string name="home_bottom_menu_profile_title">Cuenta</string>
+
+    <string name="home_news_data">Encuentra lo que buscas dentro del campus y queda con los vendedores en el recreo</string>
+
 
 </resources>
