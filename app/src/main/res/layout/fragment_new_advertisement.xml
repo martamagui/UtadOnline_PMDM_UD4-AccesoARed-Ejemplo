@@ -1,9 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.NewAdvertisementFragment">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_new_addvertisement_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:text="@string/new_add_title"
+            android:textAppearance="@style/ViewTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/new_add_subtitle"
+            android:textAppearance="@style/ViewSubTitle"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toBottomOf="@+id/tv_new_addvertisement_title" />
+
+        <ImageView
+            android:id="@+id/iv_image_icon"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="6dp"
+            android:src="@drawable/ic_image_search"
+            android:translationZ="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_slected_image_preview"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toTopOf="@+id/iv_slected_image_preview"
+            app:tint="@color/md_theme_dark_inversePrimary" />
+
+        <TextView
+            android:id="@+id/tv_select_image_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/new_add_select_image_description"
+            android:textColor="@color/md_theme_dark_inversePrimary"
+            android:translationZ="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image_icon" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_slected_image_preview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:elevation="8dp"
+            android:src="@drawable/bg_image_selection_gradient"
+            android:translationZ="-1dp"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subtitle"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.RoundedCorners" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/new_add_title_hint"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toBottomOf="@+id/iv_slected_image_preview">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|textAutoComplete|textAutoCorrect"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="top"
+            android:hint="@string/new_add_details_hint"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toBottomOf="@+id/til_price">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:inputType="text|textAutoComplete|textAutoCorrect|textMultiLine"
+                android:minHeight="120dp"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/new_add_price_hint"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="8dp"
+            app:boxCornerRadiusBottomStart="8dp"
+            app:boxCornerRadiusTopEnd="8dp"
+            app:boxCornerRadiusTopStart="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_slected_image_preview"
+            app:layout_constraintStart_toStartOf="@+id/iv_slected_image_preview"
+            app:layout_constraintTop_toBottomOf="@+id/tv_add_details">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number|numberDecimal"
+                tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_add_details"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/new_add_details_subtitle"
+            android:textAppearance="@style/ViewSubTitle"
+            app:layout_constraintEnd_toEndOf="@+id/til_title"
+            app:layout_constraintStart_toStartOf="@+id/til_title"
+            app:layout_constraintTop_toBottomOf="@+id/til_title" />
+
+        <Button
+            android:id="@+id/btn_new_add"
+            style="@style/CustomButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="42dp"
+            android:text="@string/new_add_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/til_description"
+            app:layout_constraintStart_toStartOf="@+id/til_description"
+            app:layout_constraintTop_toBottomOf="@+id/til_description" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

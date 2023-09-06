@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentAdvertisementListBinding
 import com.utad.wallu_tad.model.Advertisement
@@ -29,6 +30,13 @@ class AdvertisementListFragment : Fragment() {
         return binding.root
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.rvAdvertisement.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvAdvertisement.adapter = adapter
+    }
 
     private fun goToDetail(advertisement: Advertisement) {
         val intent = Intent(requireContext(), AdvertisementDetailActivity::class.java)

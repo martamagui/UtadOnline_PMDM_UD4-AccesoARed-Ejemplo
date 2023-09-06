@@ -3,6 +3,7 @@ package com.utad.wallu_tad.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.ActivityHomeBinding
@@ -21,7 +22,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setBottomNavigationView() {
-        val navController = findNavController(binding.fcvHome.id)
-        binding.bnvHome.setupWithNavController(navController)
+        val navHostFragment = supportFragmentManager.findFragmentById(binding.fcvHome.id)
+        val controller = navHostFragment?.findNavController()
+        if (controller != null) {
+            binding.bnvHome.setupWithNavController(controller)
+        }
     }
 }

@@ -33,6 +33,16 @@
     <string name="home_bottom_menu_profile_title">Cuenta</string>
 
     <string name="home_news_data">Encuentra lo que buscas dentro del campus y queda con los vendedores en el recreo</string>
+    <string name="home_empty_list">¡Crea el primer anuncio de la app!</string>
+
+    <string name="new_add_title">Detalles del producto</string>
+    <string name="new_add_details_subtitle">Detalles específicos del producto</string>
+    <string name="new_add_subtitle">Información básica</string>
+    <string name="new_add_select_image_description">Seleccionar imágen</string>
+    <string name="new_add_title_hint">Título</string>
+    <string name="new_add_details_hint">Cuéntanos algo más sobre el producto*</string>
+    <string name="new_add_price_hint">Precio</string>
+    <string name="new_add_button">Subir producto</string>
 
 
 </resources>
