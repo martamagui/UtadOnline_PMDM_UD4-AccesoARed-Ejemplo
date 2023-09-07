@@ -43,6 +43,27 @@ class SignUpFragment : Fragment() {
         setClicks()
     }
 
+    //region --- UI Related ---
+    private fun cleanData() {
+        binding.etSignUpEmail.setText("")
+        binding.etSignUpPassword.setText("")
+        binding.etUserName.setText("")
+        binding.etUserName.setText("")
+    }
+
+    private fun setClicks() {
+        binding.btnSignUp.setOnClickListener {
+            if (isDataValid()) {
+                setUserNameCheckRequest()
+            } else {
+                showInvalidDataMessage()
+            }
+        }
+    }
+    //endregion --- UI Related ---
+
+
+    //region --- HTTP Request Related ---
     private fun initNetworkService() {
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -83,9 +104,7 @@ class SignUpFragment : Fragment() {
                 showNameError()
                 Log.e("user/is-username-taken", "$t")
             }
-
         })
-
     }
 
     private fun createUserRequest() {
@@ -113,24 +132,9 @@ class SignUpFragment : Fragment() {
             }
         })
     }
+    //endregion --- HTTP Request ---
 
-    private fun cleanData() {
-        binding.etSignUpEmail.setText("")
-        binding.etSignUpPassword.setText("")
-        binding.etUserName.setText("")
-        binding.etUserName.setText("")
-    }
-
-    private fun setClicks() {
-        binding.btnSignUp.setOnClickListener {
-            if (isDataValid()) {
-                setUserNameCheckRequest()
-            } else {
-                showInvalidDataMessage()
-            }
-        }
-    }
-
+    //region --- Data validation ---
     private fun isDataValid(): Boolean {
         val email = binding.etSignUpEmail.text.toString().trim()
         val password = binding.etSignUpPassword.text.toString().trim()
@@ -138,6 +142,7 @@ class SignUpFragment : Fragment() {
         val fullName = binding.etUserName.text.toString().trim()
         return email.isNotEmpty() && password.isNotEmpty() && userName.isNotEmpty() && fullName.isNotEmpty()
     }
+    //endregion --- Data validation ---
 
 
     //region --- Messages ---
