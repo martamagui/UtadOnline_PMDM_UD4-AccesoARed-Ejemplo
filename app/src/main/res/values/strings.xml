@@ -16,6 +16,10 @@
     <string name="sign_up_password_hint">Contraseña</string>
     <string name="sign_up_password_description">La contraseña debe contener al menos 6 caracteres.</string>
     <string name="sign_up_button_description">Crear una cuenta</string>
+    <string name="sign_up_name_taken_error">Este nombre no se encuentra disponible</string>
+    <string name="sign_up_failed_error">Ha ocurrido un fallo en el registro</string>
+    <string name="sign_up_invalid_data_error">Los datos introducidos no son válidos</string>
+    <string name="sign_up_saved_user_message">¡Bienvenido a WallU-Tad!</string>
 
     <string name="feed_title">Producto cerca de ti</string>
 

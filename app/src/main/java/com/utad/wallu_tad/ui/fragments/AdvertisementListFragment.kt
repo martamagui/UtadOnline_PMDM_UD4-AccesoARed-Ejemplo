@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentAdvertisementListBinding
-import com.utad.wallu_tad.model.Advertisement
+import com.utad.wallu_tad.network.model.Advertisement
 import com.utad.wallu_tad.ui.activities.AdvertisementDetailActivity
 import com.utad.wallu_tad.ui.adapters.AdvertisementListAdapter
 

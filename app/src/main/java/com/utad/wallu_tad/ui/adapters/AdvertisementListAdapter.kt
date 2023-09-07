@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.AdvertisementItemBinding
-import com.utad.wallu_tad.model.Advertisement
+import com.utad.wallu_tad.network.model.Advertisement
 import java.util.zip.Inflater
 
 class AdvertisementListAdapter(val action: (advertisement: Advertisement) -> Unit) :
