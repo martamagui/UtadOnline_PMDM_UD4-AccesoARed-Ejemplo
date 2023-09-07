@@ -36,6 +36,14 @@ class AdvertisementListFragment : Fragment() {
 
         binding.rvAdvertisement.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvAdvertisement.adapter = adapter
+
+        //TODO borrar solo provisional para ver
+        binding.tvNews.setOnClickListener { goToDetail() }
+    }
+
+    private fun goToDetail() {
+        val intent = Intent(requireContext(), AdvertisementDetailActivity::class.java)
+        startActivity(intent)
     }
 
     private fun goToDetail(advertisement: Advertisement) {

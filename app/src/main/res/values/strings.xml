@@ -25,7 +25,6 @@
     <string name="advertisement_detail_shipping_home_description">En la puerta de casa desde <b>desde 11,00€</b></string>
 
     <string name="new_advertisement_title">En la puerta de casa desde <b>desde 11,00€</b></string>
-
     <string name="error_message_empty_fields">Por favor, rellena todos los campos.</string>
 
     <string name="home_bottom_menu_home_title">Feed</string>
@@ -45,6 +44,13 @@
 
     <string name="profile_log_out_button">Cerrar sesión</string>
     <string name="profile_delete_account_button">Borrar cuenta</string>
+
+    <string name="new_add_button">Publicar anuncio</string>
+
+    <string name="detail_pick_up_available">Recogida en el campus disponible</string>
+    <string name="detail_status">Como nuevo</string>
+    <string name="detail_seller">Vendido por: %s</string>
+    <string name="detail_contact_button">Contactar con el vendedor</string>
 
 
 </resources>
