@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "abbreviation": "ATL",
+      "city": "Atlanta",
+      "conference": "East",
+      "division": "Southeast",
+      "full_name": "Atlanta Hawks",
+      "name": "Hawks"
+    },
+    {
+      "id": 2,
+      "abbreviation": "BOS",
+      "city": "Boston",
+      "conference": "East",
+      "division": "Atlantic",
+      "full_name": "Boston Celtics",
+      "name": "Celtics"
+    }
+  ],
+  "meta": {
+    "total_pages": 2,
+    "current_page": 1,
+    "next_page": 2,
+    "per_page": 30,
+    "total_count": 45
+  }
+}
