@@ -1,5 +1,6 @@
 package com.utad.wallu_tad.network
 
+import com.utad.wallu_tad.network.model.Advertisement
 import com.utad.wallu_tad.network.model.CredentialsBody
 import com.utad.wallu_tad.network.model.BasicResponse
 import com.utad.wallu_tad.network.model.TokenResponse
@@ -25,5 +26,10 @@ interface WallUTadService {
 
 
     //region --- Advertisement ---
+
+
+    @GET("advertisement/{id}")
+    fun getAdvertisementId(@Path("id") id: String): Call<Advertisement>
+
     //endregion --- Advertisement ---
 }

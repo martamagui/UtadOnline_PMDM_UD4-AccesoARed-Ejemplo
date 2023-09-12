@@ -2,7 +2,15 @@ package com.utad.wallu_tad.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.GlideBuilder
 import com.utad.wallu_tad.databinding.ActivityAdvertisementDetailBinding
+import com.utad.wallu_tad.network.WallUTadApi
+import com.utad.wallu_tad.network.WallUTadService
+import com.utad.wallu_tad.network.model.Advertisement
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AdvertisementDetailActivity : AppCompatActivity() {
 
@@ -14,6 +22,49 @@ class AdvertisementDetailActivity : AppCompatActivity() {
         _binding = ActivityAdvertisementDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        requireData()
+        setClicks()
+    }
+
+    private fun setClicks() {
+        binding.toolbar.setNavigationOnClickListener { finish() }
+        binding.btnContactDetail.setOnClickListener {
+            //TODO mostrar un mensaje de contactar con el vendedor
+        }
+    }
+
+    private fun requireData() {
+        val advertisementId = intent.extras?.getString("advertisementId")
+        if (advertisementId != null) {
+            WallUTadApi.service.getAdvertisementId(advertisementId)
+                .enqueue(object : Callback<Advertisement> {
+                    override fun onResponse(
+                        call: Call<Advertisement>,
+                        response: Response<Advertisement>
+                    ) {
+                        if (response.body() != null) {
+                            setAdvertisementData(response.body()!!)
+                        } else {
+                            //TODO hacer el mensaje de error
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Advertisement>, t: Throwable) {
+                        //TODO hacer el mensaje de error
+
+                    }
+                })
+
+        }
+    }
+
+    private fun setAdvertisementData(advertisement: Advertisement) {
+        Glide.with(binding.ivProduct).load(advertisement.image)
+        binding.tvDescriptionDetail.text = advertisement.description
+        binding.tvDetailPrice.text = "${advertisement.price} €"
+        binding.tvDetailTitle.text = advertisement.title
 
     }
+
+
 }

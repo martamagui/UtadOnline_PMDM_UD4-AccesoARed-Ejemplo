@@ -16,5 +16,7 @@ data class Advertisement(
     @SerializedName("title")
     val title: String,
     @SerializedName("user_name")
-    val userName: String
+    val userName: String,
+    @SerializedName("tags")
+    val tags: List<String>?
 )
