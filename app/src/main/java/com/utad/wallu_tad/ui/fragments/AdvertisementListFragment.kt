@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
+import java.lang.Exception
 
 
 class AdvertisementListFragment : Fragment() {
@@ -51,9 +52,10 @@ class AdvertisementListFragment : Fragment() {
     }
 
     private fun getAdvertisementList() {
-        try {
-            lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
                 val response = WallUTadApi.service.getAllAdvertisements()
+                //Comprobamos si la respuesta fue exitosa
                 if (response.isSuccessful) {
                     withContext(Dispatchers.Main) {
                         showAds(response.body())
@@ -61,12 +63,10 @@ class AdvertisementListFragment : Fragment() {
                 } else {
                     showErrorMessage(response.errorBody())
                 }
+            }catch (e: Exception){
+                showErrorMessage(null)
             }
-        } catch (exception: Exception) {
-            showErrorMessage(null)
         }
-
-
     }
 
     private fun showAds(body: List<Advertisement>?) {

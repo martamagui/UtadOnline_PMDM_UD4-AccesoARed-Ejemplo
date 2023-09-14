@@ -28,6 +28,9 @@ interface WallUTadService {
 
 
     //region --- Advertisement ---
+
+
+
     @GET("advertisement")
     suspend fun getAllAdvertisements(): Response<List<Advertisement>>
 

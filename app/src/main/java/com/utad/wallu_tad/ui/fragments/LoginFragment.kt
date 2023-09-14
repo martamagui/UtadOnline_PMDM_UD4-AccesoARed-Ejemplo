@@ -35,14 +35,7 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setClicks()
-    }
-
-    private fun isDataValid(): Boolean {
-        val email = binding.etLoginEmail.text.toString().trim()
-        val password = binding.etLoginPassword.text.toString().trim()
-        return email.isNotEmpty() && password.isNotEmpty()
     }
 
     private fun setClicks() {
@@ -106,5 +99,10 @@ class LoginFragment : BottomSheetDialogFragment() {
         requireActivity().finish()
     }
 
+    private fun isDataValid(): Boolean {
+        val email = binding.etLoginEmail.text.toString().trim()
+        val password = binding.etLoginPassword.text.toString().trim()
+        return email.isNotEmpty() && password.isNotEmpty()
+    }
 
 }
