@@ -10,10 +10,11 @@ object WallUTadApi {
         level = HttpLoggingInterceptor.Level.BODY
     }
     private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://ud4-server.onrender.com/api/v1/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
+        .baseUrl("https://ud4-server.onrender.com/api/v1/")//El url base siempre debe acabar en /
+        .client(client)//Intercepta por consola los datos enviados y recibidos de las peticiones
+        .addConverterFactory(GsonConverterFactory.create())//Parsea el json recibido a nuestras data class
         .build()
 
     val service: WallUTadService by lazy {
