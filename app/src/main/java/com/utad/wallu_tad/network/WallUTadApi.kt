@@ -5,22 +5,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 object WallUTadApi {
-
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        this.level = HttpLoggingInterceptor.Level.BODY
+    private val interceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
     }
-
-    private val client: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
-
+    private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://ud4-server.onrender.com/api/v1/")//El url base siempre debe acabar en /
-        .client(client)//Intercepta por consola los datos enviados y recibidos de las peticiones
-        .addConverterFactory(GsonConverterFactory.create()) //Parsea el json recibido a nuestras data class
+        .baseUrl("https://ud4-server.onrender.com/api/v1/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
         .build()
 
-    val service = retrofit.create(WallUTadService::class.java)
+    val service: WallUTadService by lazy {
+        retrofit.create(WallUTadService::class.java)
+    }
 }
