@@ -26,7 +26,6 @@ class SignUpFragment : Fragment() {
     private lateinit var _binding: FragmentSignUpBinding
     private val binding: FragmentSignUpBinding get() = _binding
 
-    private lateinit var networkService: WallUTadService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +63,10 @@ class SignUpFragment : Fragment() {
 
 
     //region --- HTTP Request Related ---
+
+
+    private lateinit var networkService: WallUTadService
+
     private fun initNetworkService() {
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -79,8 +82,8 @@ class SignUpFragment : Fragment() {
     }
 
     private fun setUserNameCheckRequest() {
-
         val userName = binding.etUserName.text.toString().trim()
+
         val checkUserNameCall = networkService.checkIfUserNameIsTaken(userName)
 
         checkUserNameCall.enqueue(object : Callback<BasicResponse> {
@@ -90,11 +93,9 @@ class SignUpFragment : Fragment() {
             ) {
                 if (response.body() != null) {
                     val message = response.body()!!.message
-
                     if (message == "unavailable") {
                         showNameError()
                     } else {
-                        //TODO do SMS verification
                         createUserRequest()
                     }
                 }
@@ -102,7 +103,6 @@ class SignUpFragment : Fragment() {
 
             override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
                 showNameError()
-                Log.e("user/is-username-taken", "$t")
             }
         })
     }
