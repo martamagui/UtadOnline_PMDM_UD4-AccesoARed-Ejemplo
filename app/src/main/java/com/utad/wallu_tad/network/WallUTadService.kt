@@ -6,6 +6,7 @@ import com.utad.wallu_tad.network.model.BasicResponse
 import com.utad.wallu_tad.network.model.TokenResponse
 import com.utad.wallu_tad.network.model.UserBody
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -27,6 +28,9 @@ interface WallUTadService {
 
 
     //region --- Advertisement ---
+    @GET("advertisement")
+    suspend fun getAllAdvertisements(): Response<List<Advertisement>>
+
     @GET("advertisement/{id}")
     fun getAdvertisementId(@Path("id") id: String): Call<Advertisement>
 

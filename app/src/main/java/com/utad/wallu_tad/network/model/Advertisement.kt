@@ -12,7 +12,7 @@ data class Advertisement(
     @SerializedName("image")
     val image: String,
     @SerializedName("price")
-    val price: Int,
+    val price: Double,
     @SerializedName("title")
     val title: String,
     @SerializedName("user_name")

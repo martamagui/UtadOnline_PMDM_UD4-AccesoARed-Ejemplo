@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
+import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.ActivityAdvertisementDetailBinding
 import com.utad.wallu_tad.network.WallUTadApi
 import com.utad.wallu_tad.network.WallUTadService
@@ -60,9 +61,14 @@ class AdvertisementDetailActivity : AppCompatActivity() {
 
     private fun setAdvertisementData(advertisement: Advertisement) {
         Glide.with(binding.ivProduct).load(advertisement.image)
+            .centerCrop()
+            .placeholder(R.drawable.bg_divider)
+            .into(binding.ivProduct)
+
         binding.tvDescriptionDetail.text = advertisement.description
         binding.tvDetailPrice.text = "${advertisement.price} €"
         binding.tvDetailTitle.text = advertisement.title
+        binding.tvSellerName.text = getString(R.string.detail_seller, advertisement.userName)
 
     }
 
