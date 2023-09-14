@@ -48,8 +48,6 @@ class AdvertisementListFragment : Fragment() {
         binding.rvAdvertisement.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvAdvertisement.adapter = adapter
         getAdvertisementList()
-        //TODO borrar solo provisional para ver
-        binding.tvNews.setOnClickListener { goToDetail() }
     }
 
     private fun getAdvertisementList() {
@@ -84,11 +82,6 @@ class AdvertisementListFragment : Fragment() {
         var message = "Ha habido un error al recuperar los anuncios"
         Log.e("AdvertisementList", errorBody.toString())
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun goToDetail() {
-        val intent = Intent(requireContext(), AdvertisementDetailActivity::class.java)
-        startActivity(intent)
     }
 
     private fun goToDetail(advertisement: Advertisement) {
