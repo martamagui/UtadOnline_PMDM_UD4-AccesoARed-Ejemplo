@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.bumptech.glide.GlideBuilder
+import com.google.firebase.database.FirebaseDatabase
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.ActivityAdvertisementDetailBinding
 import com.utad.wallu_tad.network.WallUTadApi
