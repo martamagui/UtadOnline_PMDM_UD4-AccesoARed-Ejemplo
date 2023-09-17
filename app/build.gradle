@@ -77,4 +77,7 @@ dependencies {
     //Firebase - RealTime Database
     implementation("com.google.firebase:firebase-database-ktx")
 
+    //Firebase - CloudStorage
+    implementation "com.google.firebase:firebase-storage-ktx:$firebase_version"
+
 }

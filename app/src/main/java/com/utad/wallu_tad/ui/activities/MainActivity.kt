@@ -3,8 +3,6 @@ package com.utad.wallu_tad.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.utad.wallu_tad.databinding.ActivityMainBinding
-import com.utad.wallu_tad.db.WallUTadFirebaseDataBase
-import com.utad.wallu_tad.db.model.FavouriteAdvertisement
 
 class MainActivity : AppCompatActivity() {
 
