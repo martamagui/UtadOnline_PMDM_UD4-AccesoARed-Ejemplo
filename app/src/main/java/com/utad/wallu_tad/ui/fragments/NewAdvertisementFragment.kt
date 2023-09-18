@@ -93,17 +93,21 @@ class NewAdvertisementFragment : Fragment() {
             )
         )
         binding.ivSlectedImagePreview.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (uploadedImageUrl != null) {
-                    val wasDeleted: Boolean =
-                        CloudStorageManager().deleteImage(uploadedImageUrl!!)
-                    if (wasDeleted) {
-                        Log.i("NewAdvertisementFragment", "Foto eliminada")
-                    }
-                    openGallery()
-                }
-            }
+            deleteImageAndOpenGallery()
+        }
+    }
 
+    private fun deleteImageAndOpenGallery() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (uploadedImageUrl != null) {
+                //Esperamos a que nos retorne si la foto se borró a partir del enlace o no
+                val wasDeleted: Boolean = CloudStorageManager().deleteImage(uploadedImageUrl!!)
+
+                if (wasDeleted) {
+                    Log.i("NewAdvertisementFragment", "Foto eliminada")
+                }
+                openGallery()
+            }
         }
     }
 
