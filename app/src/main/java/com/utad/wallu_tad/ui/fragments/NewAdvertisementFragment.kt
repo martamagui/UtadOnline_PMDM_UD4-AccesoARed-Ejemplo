@@ -16,12 +16,15 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentNewAdvertisementBinding
 import com.utad.wallu_tad.firebase.cloud_storage.CloudStorageManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class NewAdvertisementFragment : Fragment() {
@@ -38,18 +41,7 @@ class NewAdvertisementFragment : Fragment() {
                 val data: Intent? = result.data
                 if (data != null) {
                     selectedImageUri = data.data
-                    CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                //recuperamos el enlace donde se subió la imagen
-                                uploadedImageUrl = "${task.result}"
-                                deleteImageReference = "$selectedImageUri".replace("/", "_")
-                                setImagePreview()
-                                Log.i("NewAdv", "Enlace de la foto: $uploadedImageUrl")
-                            } else {
-                                Log.e("NewAdv", "No se ha podido subir la foto")
-                            }
-                        }
+                    uploadImage(selectedImageUri)
                 } else {
                     showErrorMessageNoImage()
                 }
@@ -57,6 +49,12 @@ class NewAdvertisementFragment : Fragment() {
                 showErrorMessageNoImage()
             }
         }
+
+    private fun uploadImage(selectedImageUri: Uri?) {
+        lifecycleScope.launch(Dispatchers.IO){
+            val uploadedImageResponse = CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
+        }
+    }
 
     private fun setImagePreview() {
         Glide.with(binding.ivSlectedImagePreview).load(uploadedImageUrl)
@@ -85,13 +83,17 @@ class NewAdvertisementFragment : Fragment() {
             )
         )
         binding.ivSlectedImagePreview.setOnClickListener {
-            if (deleteImageReference != null)
-                CloudStorageManager().deleteImage(deleteImageReference!!).addOnSuccessListener {
-                    Log.i("NewAdvertisementFragment", "Foto eliminada")
-                    openGallery()
-                }.addOnFailureListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (deleteImageReference != null) {
+                    val wasDeleted: Boolean =
+                        CloudStorageManager().deleteImage(deleteImageReference!!)
+                    if (wasDeleted) {
+                        Log.i("NewAdvertisementFragment", "Foto eliminada")
+                    }
                     openGallery()
                 }
+            }
+
         }
     }
 
