@@ -24,6 +24,12 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setClicks()
+
+    }
+
+    private fun setClicks() {
+        TODO("Not yet implemented")
     }
 
 

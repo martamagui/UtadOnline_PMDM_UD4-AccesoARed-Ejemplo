@@ -3,18 +3,24 @@ package com.utad.wallu_tad.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentLoginBinding
 import com.utad.wallu_tad.network.WallUTadApi
 import com.utad.wallu_tad.network.model.CredentialsBody
 import com.utad.wallu_tad.network.model.TokenResponse
+import com.utad.wallu_tad.storage.DataStoreManager
 import com.utad.wallu_tad.ui.activities.HomeActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,6 +30,7 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     private lateinit var _binding: FragmentLoginBinding
     private val binding: FragmentLoginBinding get() = _binding
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +42,20 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        dataStoreManager = DataStoreManager(requireContext())
         setClicks()
+        checkUserLogged()
+    }
+
+    private fun checkUserLogged() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (dataStoreManager.isUserLogged()) {
+                withContext(Dispatchers.IO) {
+                    navigateToHome()
+                }
+            }
+        }
     }
 
     private fun setClicks() {
@@ -69,8 +89,9 @@ class LoginFragment : BottomSheetDialogFragment() {
         WallUTadApi.service.login(credentials).enqueue(object : Callback<TokenResponse> {
             override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
                 if (response.isSuccessful) {
-                    saveUserToken(response.body())
-                    navigateToHome()
+                    if (response.body() != null && response.body()?.token != null) {
+                        saveUser(response.body()!!.token, email)
+                    }
                 } else {
                     showErrorMessage(null)
                 }
@@ -83,8 +104,10 @@ class LoginFragment : BottomSheetDialogFragment() {
 
     }
 
-    private fun saveUserToken(body: TokenResponse?) {
-        //TODO guardar en el datastore el token
+    private fun saveUser(jwt: String, email: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            dataStoreManager.saveUser(email, jwt)
+        }
     }
 
     private fun showErrorMessage(error: Throwable?) {
