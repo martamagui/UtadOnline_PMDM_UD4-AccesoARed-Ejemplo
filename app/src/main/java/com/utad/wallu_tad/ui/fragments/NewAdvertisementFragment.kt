@@ -25,6 +25,7 @@ import com.utad.wallu_tad.databinding.FragmentNewAdvertisementBinding
 import com.utad.wallu_tad.firebase.cloud_storage.CloudStorageManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class NewAdvertisementFragment : Fragment() {
@@ -33,7 +34,6 @@ class NewAdvertisementFragment : Fragment() {
     private val binding: FragmentNewAdvertisementBinding get() = _binding
     private var selectedImageUri: Uri? = null
     private var uploadedImageUrl: String? = null
-    private var deleteImageReference: String? = null
 
     private var imageGalleryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -51,13 +51,23 @@ class NewAdvertisementFragment : Fragment() {
         }
 
     private fun uploadImage(selectedImageUri: Uri?) {
-        lifecycleScope.launch(Dispatchers.IO){
+        lifecycleScope.launch(Dispatchers.IO) {
             val uploadedImageResponse = CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
+
+            withContext(Dispatchers.Main) {
+                if (uploadedImageResponse == null) {
+                    Toast.makeText(requireContext(), "Subida de imagen fallida",Toast.LENGTH_SHORT).show()
+                } else {
+                    //Mostramos la imagen cuando recibamos el link
+                    uploadedImageUrl = uploadedImageResponse
+                    setImagePreview(uploadedImageResponse)
+                }
+            }
         }
     }
 
-    private fun setImagePreview() {
-        Glide.with(binding.ivSlectedImagePreview).load(uploadedImageUrl)
+    private fun setImagePreview(uploadedImageResponse: String) {
+        Glide.with(binding.ivSlectedImagePreview).load(uploadedImageResponse)
             .centerCrop()
             .placeholder(R.drawable.bg_divider)
             .into(binding.ivSlectedImagePreview)
@@ -83,17 +93,21 @@ class NewAdvertisementFragment : Fragment() {
             )
         )
         binding.ivSlectedImagePreview.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                if (deleteImageReference != null) {
-                    val wasDeleted: Boolean =
-                        CloudStorageManager().deleteImage(deleteImageReference!!)
-                    if (wasDeleted) {
-                        Log.i("NewAdvertisementFragment", "Foto eliminada")
-                    }
-                    openGallery()
-                }
-            }
+            deleteImageAndOpenGallery()
+        }
+    }
 
+    private fun deleteImageAndOpenGallery() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (uploadedImageUrl != null) {
+                //Esperamos a que nos retorne si la foto se borró a partir del enlace o no
+                val wasDeleted: Boolean = CloudStorageManager().deleteImage(uploadedImageUrl!!)
+
+                if (wasDeleted) {
+                    Log.i("NewAdvertisementFragment", "Foto eliminada")
+                }
+                openGallery()
+            }
         }
     }
 
