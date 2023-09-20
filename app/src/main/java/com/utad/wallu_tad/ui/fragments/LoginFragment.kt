@@ -13,10 +13,11 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentLoginBinding
+import com.utad.wallu_tad.firebase.authentification.AnonymousAuthenticationManager
 import com.utad.wallu_tad.network.WallUTadApi
 import com.utad.wallu_tad.network.model.CredentialsBody
 import com.utad.wallu_tad.network.model.TokenResponse
-import com.utad.wallu_tad.storage.DataStoreManager
+import com.utad.wallu_tad.firebase.storage.DataStoreManager
 import com.utad.wallu_tad.ui.activities.HomeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,7 +46,7 @@ class LoginFragment : BottomSheetDialogFragment() {
 
         dataStoreManager = DataStoreManager(requireContext())
         setClicks()
-        checkUserLogged()
+        //checkUserLogged()
     }
 
     private fun checkUserLogged() {
@@ -86,11 +87,17 @@ class LoginFragment : BottomSheetDialogFragment() {
         val email = binding.etLoginEmail.text.toString().trim()
         val password = binding.etLoginPassword.text.toString().trim()
         val credentials = CredentialsBody(email = email, password = password)
+
+        showLoading(true)
+
         WallUTadApi.service.login(credentials).enqueue(object : Callback<TokenResponse> {
             override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
+                showLoading(false)
                 if (response.isSuccessful) {
                     if (response.body() != null && response.body()?.token != null) {
                         saveUser(response.body()!!.token, email)
+                        signInFirebaseAnonymously()
+                        navigateToHome()
                     }
                 } else {
                     showErrorMessage(null)
@@ -99,8 +106,25 @@ class LoginFragment : BottomSheetDialogFragment() {
 
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
                 showErrorMessage(t)
+                showLoading(false)
             }
         })
+
+    }
+
+    private fun showLoading(isShown: Boolean) {
+        binding.pbLogin.visibility = if (isShown) View.VISIBLE else View.GONE
+    }
+
+    private fun signInFirebaseAnonymously() {
+        val firebaseAuth = AnonymousAuthenticationManager(requireContext())
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (firebaseAuth.signInAnonymously()) {
+                Log.e("Loginfirebase", "Login Firebase OK")
+            } else {
+                Log.e("Loginfirebase", "Login Firebase MAL")
+            }
+        }
 
     }
 

@@ -25,7 +25,6 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setClicks()
-
     }
 
     private fun setClicks() {

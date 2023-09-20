@@ -80,4 +80,7 @@ dependencies {
     //Firebase - CloudStorage
     implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
 
+    //Firebase - Authentification
+    implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
+
 }

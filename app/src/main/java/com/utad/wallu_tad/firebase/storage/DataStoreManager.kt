@@ -1,14 +1,15 @@
-package com.utad.wallu_tad.storage
+package com.utad.wallu_tad.firebase.storage
 
 import android.content.Context
 import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "WALLUTAD_STORE")
@@ -16,7 +17,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "WA
 class DataStoreManager(val context: Context) {
     private val emailKey = "EMAIL"
     private val jwtKey = "JWT"
-    private val isLogged = "IS_LOGGED"
+    private val isLoggedKey = "IS_LOGGED"
 
     private suspend fun putString(key: String, value: String) {
         context.dataStore.edit { editor ->
@@ -33,7 +34,7 @@ class DataStoreManager(val context: Context) {
     suspend fun saveUser(email: String, jwt: String) {
         putString(emailKey, email)
         putString(jwtKey, jwt)
-        putBoolean(isLogged, true)
+        putBoolean(isLoggedKey, true)
     }
 
     private fun getToken(): String? {
@@ -45,14 +46,8 @@ class DataStoreManager(val context: Context) {
     }
 
     suspend fun isUserLogged(): Boolean {
-        var isLoggedValue = false
-        val preferences = context.dataStore.data.map { editor ->
-            return@map editor
-        }
-        preferences.collect { editor ->
-            isLoggedValue = editor[booleanPreferencesKey(isLogged)] == true
-        }
-        return isLoggedValue
+        val preferences = context.dataStore.data.first()
+        return preferences[booleanPreferencesKey(isLoggedKey)] ?: false
     }
 
     suspend fun logOut() {
