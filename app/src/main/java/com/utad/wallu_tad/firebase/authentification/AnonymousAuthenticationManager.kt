@@ -6,6 +6,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class AnonymousAuthenticationManager(val context: Context) {
+
     private val auth = Firebase.auth
 
     fun isUserLogged(): Boolean {
@@ -25,5 +26,9 @@ class AnonymousAuthenticationManager(val context: Context) {
             Log.d("FirebaseAuth", "signInAnonymously:failure", result.exception)
             return false
         }
+    }
+
+    fun signOut() {
+        auth.signOut()
     }
 }
