@@ -3,6 +3,7 @@ package com.utad.wallu_tad.network
 import com.utad.wallu_tad.network.model.Advertisement
 import com.utad.wallu_tad.network.model.CredentialsBody
 import com.utad.wallu_tad.network.model.BasicResponse
+import com.utad.wallu_tad.network.model.SaveUserResponse
 import com.utad.wallu_tad.network.model.TokenResponse
 import com.utad.wallu_tad.network.model.UserBody
 import retrofit2.Call
@@ -14,9 +15,10 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface WallUTadService {
+    //region --- User ---
 
     @POST("user")
-    fun saveUser(@Body user: UserBody): Call<BasicResponse>
+    fun saveUser(@Body user: UserBody): Call<SaveUserResponse>
 
     @POST("user/login")
     fun login(@Body credentialsBody: CredentialsBody): Call<TokenResponse>
@@ -28,9 +30,6 @@ interface WallUTadService {
 
 
     //region --- Advertisement ---
-
-
-
     @GET("advertisement")
     suspend fun getAllAdvertisements(): Response<List<Advertisement>>
 

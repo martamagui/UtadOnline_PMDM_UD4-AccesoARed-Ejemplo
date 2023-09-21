@@ -1,17 +1,21 @@
 package com.utad.wallu_tad.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentSignUpBinding
+import com.utad.wallu_tad.firebase.storage.DataStoreManager
 import com.utad.wallu_tad.network.WallUTadService
 import com.utad.wallu_tad.network.model.BasicResponse
+import com.utad.wallu_tad.network.model.SaveUserResponse
 import com.utad.wallu_tad.network.model.UserBody
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -112,6 +116,7 @@ class SignUpFragment : Fragment() {
         val password = binding.etSignUpPassword.text.toString().trim()
         val userName = binding.etUserName.text.toString().trim()
         val fullName = binding.etUserName.text.toString().trim()
+        val phoneNumber = binding.etSignUpPhone.text.toString().trim().replace(" ", "")
 
         val body = UserBody(
             userName = userName,
@@ -120,18 +125,32 @@ class SignUpFragment : Fragment() {
             password = password
         )
 
-        networkService.saveUser(body).enqueue(object : Callback<BasicResponse> {
-            override fun onResponse(call: Call<BasicResponse>, response: Response<BasicResponse>) {
+        networkService.saveUser(body).enqueue(object : Callback<SaveUserResponse> {
+            override fun onResponse(
+                call: Call<SaveUserResponse>,
+                response: Response<SaveUserResponse>
+            ) {
                 showWelcomeMessage()
-                parentFragmentManager.popBackStack()
+                if (response.body() != null) {
+                    saveToken(email, response.body()!!)
+                }
+                goToSmsVerification(phoneNumber)
             }
 
-            override fun onFailure(call: Call<BasicResponse>, t: Throwable) {
+            override fun onFailure(call: Call<SaveUserResponse>, t: Throwable) {
                 showFailMessage()
                 cleanData()
             }
         })
     }
+
+    private fun saveToken(email: String, body: SaveUserResponse) {
+        val dataStoreManager = DataStoreManager(requireContext().applicationContext)
+        lifecycleScope.launch(Dispatchers.IO) {
+            dataStoreManager.saveUser(email, body.token)
+        }
+    }
+
     //endregion --- HTTP Request ---
 
     //region --- Data validation ---
@@ -166,5 +185,20 @@ class SignUpFragment : Fragment() {
             .show()
     }
     //endregion --- Messages ---
+
+    //region --- Navigation ---
+    private fun goToSmsVerification(phoneNumber: String) {
+        val transaction = parentFragmentManager.beginTransaction()
+        val bundle = Bundle()
+        bundle.putString("phoneNumber", phoneNumber)
+        val fragment = SmsVerificationCodeFragment()
+        fragment.arguments = bundle
+
+        transaction.setReorderingAllowed(true)
+            .replace(R.id.fcv_login, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    //endregion --- Navigation ---
 
 }

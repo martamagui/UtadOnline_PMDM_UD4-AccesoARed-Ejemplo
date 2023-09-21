@@ -13,13 +13,20 @@
     <string name="sign_up_name_hint">Nombre y apellidos</string>
     <string name="sign_up_user_name_hint">Nombre de usuario</string>
     <string name="sign_up_mail_hint">Dirección de e-mail</string>
+    <string name="sign_up_phone">Número de teléfono (incluyendo prefijo)</string>
     <string name="sign_up_password_hint">Contraseña</string>
     <string name="sign_up_password_description">La contraseña debe contener al menos 6 caracteres.</string>
     <string name="sign_up_button_description">Crear una cuenta</string>
     <string name="sign_up_name_taken_error">Este nombre no se encuentra disponible</string>
     <string name="sign_up_failed_error">Ha ocurrido un fallo en el registro</string>
     <string name="sign_up_invalid_data_error">Los datos introducidos no son válidos</string>
-    <string name="sign_up_saved_user_message">¡Bienvenido a WallU-Tad!</string>
+    <string name="sign_up_saved_user_message">¡Bienvenido a WallU-Tad! Ya casi estás dentro.</string>
+
+    <string name="sms_auth_title">Te hemos enviado un SMS</string>
+    <string name="sms_auth_description">Por favor, introduce el código que has recibido</string>
+    <string name="sms_auth_hint">Código</string>
+    <string name="sms_auth_button">Confirmar código</string>
+    <string name="sms_auth_resend_button">Reenviar SMS</string>
 
     <string name="feed_title">Producto cerca de ti</string>
 

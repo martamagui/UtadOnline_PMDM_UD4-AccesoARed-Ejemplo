@@ -42,6 +42,7 @@
             android:id="@+id/et_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -65,6 +66,7 @@
             android:id="@+id/et_sign_up_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -88,6 +90,33 @@
             android:id="@+id/et_sign_up_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text|textAutoComplete"
+            android:lines="1"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_sign_up_phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/sign_up_phone"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_sign_up_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_sign_up_title"
+        app:layout_constraintTop_toBottomOf="@+id/til_sign_up_email">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_sign_up_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:maxLines="1"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +133,7 @@
         app:boxCornerRadiusTopStart="8dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_sign_up_title"
         app:layout_constraintStart_toStartOf="@+id/tv_sign_up_title"
-        app:layout_constraintTop_toBottomOf="@+id/til_sign_up_email"
+        app:layout_constraintTop_toBottomOf="@+id/til_sign_up_phone"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -112,6 +141,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
+            android:maxLines="1"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
 
     </com.google.android.material.textfield.TextInputLayout>
