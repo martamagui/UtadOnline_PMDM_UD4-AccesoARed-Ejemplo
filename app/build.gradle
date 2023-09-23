@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunnerArguments["firebaseAppCheckDebugSecret"] = System.getenv("3fed6553-e4fc-47a3-b325-fe884a1841c7") ?: ""
     }
 
     buildTypes {
@@ -82,5 +84,7 @@ dependencies {
 
     //Firebase - Authentification
     implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
+    implementation("com.google.firebase:firebase-appcheck-debug")
+    implementation("com.google.firebase:firebase-appcheck-ktx")
 
 }

@@ -8,8 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
@@ -17,6 +19,9 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.utad.wallu_tad.databinding.FragmentSmsVerificationCodeBinding
 import com.utad.wallu_tad.firebase.authentification.SmsAuthenticationManager
 import com.utad.wallu_tad.ui.activities.HomeActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SmsVerificationCodeFragment : Fragment() {
@@ -53,32 +58,40 @@ class SmsVerificationCodeFragment : Fragment() {
     }
 
     private fun setClicks() {
-        binding.btnCodeConfirmation.setOnClickListener {
-            val code = binding.etSmsAuth.text.toString().trim()
-            if (code.isNullOrEmpty() == false && verificationIdReceived.isNullOrEmpty() == false) {
-                val credential = PhoneAuthProvider.getCredential(verificationIdReceived!!, code)
-                val signInResult =
-                    smsAuthenticationManager.signInWithPhoneAuthCredential(credential)
-                if (signInResult) {
-                    navigateToHome()
-                } else {
-                    Toast.makeText(requireContext(), "Error al validar tu código", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
+        binding.btnCodeConfirmation.setOnClickListener { verificateSmsCode() }
         binding.btnResendSms.setOnClickListener { sendSmsCode() }
     }
 
-    private var verificationIdReceived: String? = null
+    private fun verificateSmsCode() {
+        val code = binding.etSmsAuth.text.toString().trim()
+        if (code.isNullOrEmpty() == false && verificationIdReceived.isNullOrEmpty() == false) {
+            val credential = PhoneAuthProvider.getCredential(verificationIdReceived!!, code)
+            lifecycleScope.launch(Dispatchers.IO) {
+                val signInResult =
+                    smsAuthenticationManager.signInWithPhoneAuthCredential(credential)
+                withContext(Dispatchers.Main) {
+                    showSmsVerificationResult(signInResult)
+                }
+            }
+        }
+    }
 
+    private fun showSmsVerificationResult(signInResult: Boolean) {
+        if (signInResult) {
+            navigateToHome()
+        } else {
+            Toast.makeText(requireContext(), "Error al validar tu código", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private var verificationIdReceived: String? = null
 
     private fun sendSmsCode() {
         if (phoneNumber != null) {
             val callback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                     Log.d("Firebase-OnVerificationCompleted", "onVerificationCompleted:$credential")
-
                 }
 
                 override fun onVerificationFailed(e: FirebaseException) {
@@ -87,10 +100,13 @@ class SmsVerificationCodeFragment : Fragment() {
                         message = "Petición no válida"
                     } else if (e is FirebaseTooManyRequestsException) {
                         message = "Cuota de SMS sobrepasada"
+                    } else if (e is FirebaseAuthException) {
+                        message =
+                            "Tu app aun no está publicada en la play store y no puede ser verificada"
                     } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
                         message = "No fue posible lanzar el ReChapta desde la Activity"
                     }
-                    Log.e("Firebase-OonVerificationFailed", "onVerificationFailed:$e")
+                    Log.e("Firebase-OonVerificationFailed", "onVerificationFailed: $e")
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
 

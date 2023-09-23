@@ -1,6 +1,7 @@
 package com.utad.wallu_tad.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentSignUpBinding
+import com.utad.wallu_tad.firebase.authentification.EmailAndPasswordAuthenticationManager
 import com.utad.wallu_tad.firebase.storage.DataStoreManager
 import com.utad.wallu_tad.network.WallUTadService
 import com.utad.wallu_tad.network.model.BasicResponse
@@ -134,6 +136,7 @@ class SignUpFragment : Fragment() {
                 if (response.body() != null) {
                     saveToken(email, response.body()!!)
                 }
+                createFirebaseMailAndPasswordUser(email, password)
                 goToSmsVerification(phoneNumber)
             }
 
@@ -152,6 +155,23 @@ class SignUpFragment : Fragment() {
     }
 
     //endregion --- HTTP Request ---
+
+    //region --- Firebase ---
+    private fun createFirebaseMailAndPasswordUser(email: String, password: String) {
+        //Instanciamos nuestra clase para poder usarla
+        val firebaseAuth = EmailAndPasswordAuthenticationManager()
+
+        //Lanzamos una corrutina para llamar al login
+        lifecycleScope.launch(Dispatchers.IO) {
+            // Usamos nuestra instancia de la clase para llamar a la función de crear el usuario también en Firebase
+            if (firebaseAuth.signInFirebaseEmailAndPassword(email, password)) {
+                Log.i("createFirebaseMailAndPasswordUser", "Create user Firebase OK")
+            } else {
+                Log.e("createFirebaseMailAndPasswordUser", "Create user Firebase MAL")
+            }
+        }
+    }
+    //region --- Firebase ---
 
     //region --- Data validation ---
     private fun isDataValid(): Boolean {

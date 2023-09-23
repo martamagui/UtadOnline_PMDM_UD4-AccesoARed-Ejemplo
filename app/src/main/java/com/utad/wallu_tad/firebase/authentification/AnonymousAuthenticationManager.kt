@@ -4,21 +4,28 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 
-class AnonymousAuthenticationManager(val context: Context) {
+class AnonymousAuthenticationManager() {
 
     private val auth = Firebase.auth
 
     fun isUserLogged(): Boolean {
         val currentUser = auth.currentUser
+        //Comprobamos que no haya ningún usuario autentificado, si lo hay es que ya está loggeado
         if (currentUser != null) {
-            Log.d("FirebaseAuth", "usuario logeado")
+            Log.d("FirebaseAuth", "Usuario logeado")
         }
         return currentUser != null
     }
 
-    fun signInAnonymously(): Boolean {
+    suspend fun signInAnonymously(): Boolean {
+        //Guardamos lo que nos devuelva la función ".signInAnonymously()" para comprobar su resultado más adelante.
         val result = auth.signInAnonymously()
+        //Decimos a la función que no avance hasta que se resulta la tarea de signIn
+        result.await()
+
+        // Con ".isSuccessful" podemos comprobar si el Login tuvo éxito
         if (result.isSuccessful) {
             Log.d("FirebaseAuth", "signInAnonymously:success")
             return true
@@ -29,6 +36,8 @@ class AnonymousAuthenticationManager(val context: Context) {
     }
 
     fun signOut() {
+        //Cerramos sesión del usuario
         auth.signOut()
     }
 }
+
