@@ -18,7 +18,8 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        testInstrumentationRunnerArguments["firebaseAppCheckDebugSecret"] = System.getenv("3fed6553-e4fc-47a3-b325-fe884a1841c7") ?: ""
+        //Firebase - Authentification para poder probar auth por SMS sin publicar
+        testInstrumentationRunnerArguments["firebaseAppCheckDebugSecret"] = System.getenv("tu clave de prueba") ?: ""
     }
 
     buildTypes {
@@ -84,6 +85,8 @@ dependencies {
 
     //Firebase - Authentification
     implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
+
+    //Firebase - Authentification para poder probar auth por SMS sin publicar
     implementation("com.google.firebase:firebase-appcheck-debug")
     implementation("com.google.firebase:firebase-appcheck-ktx")
 

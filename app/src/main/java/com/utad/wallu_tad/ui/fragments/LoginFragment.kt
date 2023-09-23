@@ -49,7 +49,7 @@ class LoginFragment : BottomSheetDialogFragment() {
         setClicks()
         checkUserLogged()
     }
-    
+
     //region ------- UI Related -------
     private fun setClicks() {
         binding.btnLogin.setOnClickListener {

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentSignUpBinding
 import com.utad.wallu_tad.firebase.authentification.EmailAndPasswordAuthenticationManager
@@ -137,7 +138,10 @@ class SignUpFragment : Fragment() {
                     saveToken(email, response.body()!!)
                 }
                 createFirebaseMailAndPasswordUser(email, password)
-                goToSmsVerification(phoneNumber)
+                //goToSmsVerification(phoneNumber)
+
+                //Retrocedemos a la vista del login
+                findNavController().popBackStack()
             }
 
             override fun onFailure(call: Call<SaveUserResponse>, t: Throwable) {
