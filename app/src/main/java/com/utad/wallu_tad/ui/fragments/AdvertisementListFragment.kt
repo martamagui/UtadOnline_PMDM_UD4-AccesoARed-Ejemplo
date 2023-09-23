@@ -42,7 +42,6 @@ class AdvertisementListFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,6 +50,7 @@ class AdvertisementListFragment : Fragment() {
         getAdvertisementList()
     }
 
+    //region ---- Retrofit ---
     private fun getAdvertisementList() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
@@ -63,12 +63,15 @@ class AdvertisementListFragment : Fragment() {
                 } else {
                     showErrorMessage(response.errorBody())
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 showErrorMessage(null)
             }
         }
     }
+    //endregion ---- Retrofit ---
 
+
+    //region ---- Ui related ---
     private fun showAds(body: List<Advertisement>?) {
         if (body.isNullOrEmpty() == false) {
             adapter.submitList(body)
@@ -83,11 +86,14 @@ class AdvertisementListFragment : Fragment() {
         Log.e("AdvertisementList", errorBody.toString())
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+    //endregion ---- Ui related ---
 
+
+    //region ---- Navigation ---
     private fun goToDetail(advertisement: Advertisement) {
         val intent = Intent(requireContext(), AdvertisementDetailActivity::class.java)
         intent.putExtra("advertisementId", advertisement.id)
         startActivity(intent)
     }
-
+    //endregion ---- Navigation ---
 }

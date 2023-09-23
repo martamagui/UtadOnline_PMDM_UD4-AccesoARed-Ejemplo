@@ -67,6 +67,7 @@ class LoginFragment : BottomSheetDialogFragment() {
     }
     //endregion ------- UI Related -------
 
+
     //region ------- Retrofit --------
     private fun sendLogin() {
         val email = binding.etLoginEmail.text.toString().trim()
