@@ -19,6 +19,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WallUTad"
         tools:targetApi="31">
+        <service
+            android:name=".firebase.cloud_messaging.FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <receiver android:name=".notifications.NotificationBroadcastReceiver"
             android:enabled="true"/>

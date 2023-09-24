@@ -50,13 +50,41 @@ class NewAdvertisementFragment : Fragment() {
             }
         }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentNewAdvertisementBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.ivSlectedImagePreview.setImageDrawable(
+            resources.getDrawable(
+                R.drawable.bg_image_selection_gradient,
+                requireContext().theme
+            )
+        )
+        binding.ivSlectedImagePreview.setOnClickListener {
+            if (uploadedImageUrl != null) {
+                deleteImageAndOpenGallery()
+            } else {
+                checkIfWeAlreadyHaveThisPermission()
+            }
+        }
+    }
+
     private fun uploadImage(selectedImageUri: Uri?) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val uploadedImageResponse = CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
+            val uploadedImageResponse =
+                CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
 
             withContext(Dispatchers.Main) {
                 if (uploadedImageResponse == null) {
-                    Toast.makeText(requireContext(), "Subida de imagen fallida",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Subida de imagen fallida", Toast.LENGTH_SHORT)
+                        .show()
                 } else {
                     //Mostramos la imagen cuando recibamos el link
                     uploadedImageUrl = uploadedImageResponse
@@ -75,27 +103,6 @@ class NewAdvertisementFragment : Fragment() {
         binding.tvSelectImageDescription.visibility = View.GONE
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentNewAdvertisementBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        checkIfWeAlreadyHaveThisPermission()
-        binding.ivSlectedImagePreview.setImageDrawable(
-            resources.getDrawable(
-                R.drawable.bg_image_selection_gradient,
-                requireContext().theme
-            )
-        )
-        binding.ivSlectedImagePreview.setOnClickListener {
-            deleteImageAndOpenGallery()
-        }
-    }
 
     private fun deleteImageAndOpenGallery() {
         lifecycleScope.launch(Dispatchers.IO) {

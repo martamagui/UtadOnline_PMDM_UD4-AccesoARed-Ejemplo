@@ -6,7 +6,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 
 class WallUTadApplication : Application() {
     private val channelId = "WALLUTAD"
@@ -18,6 +21,23 @@ class WallUTadApplication : Application() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel()
         }
+
+        registerFirebaseMessagingToken()
+    }
+
+    private fun registerFirebaseMessagingToken() {
+        val tag = "registerFirebaseMessagingToken"
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(tag, "Falló el generar el token", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Obtenemos eltoken de registro de FCM
+            val token = task.result
+            Log.i(tag, "Nuestro token es $token")
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

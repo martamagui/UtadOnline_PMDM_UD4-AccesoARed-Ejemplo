@@ -86,6 +86,9 @@ dependencies {
     //Firebase - Authentification
     implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
 
+    //Firebase - Messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
+
     //Firebase - Authentification para poder probar auth por SMS sin publicar
     implementation("com.google.firebase:firebase-appcheck-debug")
     implementation("com.google.firebase:firebase-appcheck-ktx")
