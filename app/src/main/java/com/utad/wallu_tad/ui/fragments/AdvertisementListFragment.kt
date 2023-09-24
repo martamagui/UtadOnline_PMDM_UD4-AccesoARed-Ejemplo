@@ -56,12 +56,13 @@ class AdvertisementListFragment : Fragment() {
             try {
                 val response = WallUTadApi.service.getAllAdvertisements()
                 //Comprobamos si la respuesta fue exitosa
-                if (response.isSuccessful) {
-                    withContext(Dispatchers.Main) {
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+
                         showAds(response.body())
+                    } else {
+                        showErrorMessage(response.errorBody())
                     }
-                } else {
-                    showErrorMessage(response.errorBody())
                 }
             } catch (e: Exception) {
                 showErrorMessage(null)
