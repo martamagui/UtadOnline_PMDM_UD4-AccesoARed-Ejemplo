@@ -41,6 +41,18 @@ class NewAdvertisementFragment : Fragment() {
     private lateinit var dataStoreManager: DataStoreManager
     private var selectedImageUri: Uri? = null
     private var uploadedImageUrl: String? = null
+    
+    //region --- Launchers ---
+    private val requestPermissionLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                //El permiso ha sido concedido, podemos realizar la acción que lo necesitaba
+                openGallery()
+            } else {
+                showDeniedPermissionMessage()
+                requireActivity().finish()
+            }
+        }
 
     private var imageGalleryLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -56,6 +68,7 @@ class NewAdvertisementFragment : Fragment() {
                 showErrorMessageNoImage()
             }
         }
+    //endregion --- Launchers ---
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +85,7 @@ class NewAdvertisementFragment : Fragment() {
         setClicks()
     }
 
+    //region --- UI RElated ---
     private fun setClicks() {
         binding.ivSlectedImagePreview.setImageDrawable(
             resources.getDrawable(
@@ -89,29 +103,19 @@ class NewAdvertisementFragment : Fragment() {
         binding.btnNewAdd.setOnClickListener { createNewAdd() }
     }
 
-    private fun checkData(title: String, price: Double, description: String): Boolean {
-        var isDataValid = true
-        if (title.isNullOrEmpty()) {
-            isDataValid = false
-            showMessage("Debes poner un título al anuncio")
-        } else if (price <= 0.0) {
-            isDataValid = false
-            showMessage("Necesitas poner un precio al artículo")
-        } else if (description.isNullOrEmpty()) {
-            isDataValid = false
-            showMessage("Debes poner una descripción al anuncio")
-        } else if (uploadedImageUrl == null) {
-            isDataValid = false
-            showMessage("Necesitas subir una foto para el anuncio")
-        }
-        return isDataValid
 
+    private fun setImagePreview(uploadedImageResponse: String) {
+        Glide.with(binding.ivSlectedImagePreview).load(uploadedImageResponse)
+            .centerCrop()
+            .placeholder(R.drawable.bg_divider)
+            .into(binding.ivSlectedImagePreview)
+        binding.ivImageIcon.visibility = View.GONE
+        binding.tvSelectImageDescription.visibility = View.GONE
     }
 
-    private fun showMessage(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
+    //endregion --- UI RElated ---
 
+    //region --- Retrofit ---
     private fun createNewAdd() {
         val title = binding.etTitle.text.toString().trim()
         var price: Double = 0.0
@@ -127,16 +131,6 @@ class NewAdvertisementFragment : Fragment() {
                 saveAdvertisement(title, price, description)
             }
         }
-    }
-
-    private fun getCurrentDate(): String {
-        //Obtenemos la fecha actual
-        val calendar = Calendar.getInstance()
-        // Obtener la hora, minutos y segundos actuales
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-        return "$day/$month/$year"
     }
 
     private suspend fun saveAdvertisement(title: String, price: Double, description: String) {
@@ -179,6 +173,9 @@ class NewAdvertisementFragment : Fragment() {
 
     }
 
+    //endregion --- Retrofit ---
+
+    //region --- Firebase - CloudStorage ---
     private fun uploadImage(selectedImageUri: Uri?) {
         lifecycleScope.launch(Dispatchers.IO) {
             val uploadedImageResponse =
@@ -197,16 +194,6 @@ class NewAdvertisementFragment : Fragment() {
         }
     }
 
-    private fun setImagePreview(uploadedImageResponse: String) {
-        Glide.with(binding.ivSlectedImagePreview).load(uploadedImageResponse)
-            .centerCrop()
-            .placeholder(R.drawable.bg_divider)
-            .into(binding.ivSlectedImagePreview)
-        binding.ivImageIcon.visibility = View.GONE
-        binding.tvSelectImageDescription.visibility = View.GONE
-    }
-
-
     private fun deleteImageAndOpenGallery() {
         lifecycleScope.launch(Dispatchers.IO) {
             if (uploadedImageUrl != null) {
@@ -220,7 +207,41 @@ class NewAdvertisementFragment : Fragment() {
             }
         }
     }
+    //endregion --- Firebase - CloudStorage ---
 
+    //region --- Messages ---
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showPermissionRationaleDialog(externalStoragePermission: String) {
+        val title = getString(R.string.new_advertisement_permission_dialog_title)
+        val message = getString(R.string.new_advertisement_permission_dialog_message)
+        val positiveButton = getString(R.string.new_advertisement_permission_dialog_positive_button)
+        val negativeButton = getString(R.string.new_advertisement_permission_dialog_negative_button)
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(positiveButton) { dialog, which ->
+                requestPermissionLauncher.launch(externalStoragePermission)
+            }
+            .setNegativeButton(negativeButton) { dialog, which -> requireActivity().finish() }
+            .show()
+    }
+
+    private fun showDeniedPermissionMessage() {
+        val message = getString(R.string.new_advertisement_denied_permission)
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun showErrorMessageNoImage() {
+        val message = getString(R.string.new_advertisement_no_select_image_error)
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+    //endregion --- Messages ---
+
+    //region --- Photo gallery ---
     private fun checkIfWeAlreadyHaveThisPermission() {
         val externalStoragePermission: String = Manifest.permission.READ_EXTERNAL_STORAGE
         val permissionStatus =
@@ -240,32 +261,6 @@ class NewAdvertisementFragment : Fragment() {
         }
     }
 
-    private fun showPermissionRationaleDialog(externalStoragePermission: String) {
-        val title = getString(R.string.new_advertisement_permission_dialog_title)
-        val message = getString(R.string.new_advertisement_permission_dialog_message)
-        val positiveButton = getString(R.string.new_advertisement_permission_dialog_positive_button)
-        val negativeButton = getString(R.string.new_advertisement_permission_dialog_negative_button)
-
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(positiveButton) { dialog, which ->
-                requestPermissionLauncher.launch(externalStoragePermission)
-            }
-            .setNegativeButton(negativeButton) { dialog, which -> requireActivity().finish() }
-            .show()
-    }
-
-    private val requestPermissionLauncher: ActivityResultLauncher<String> =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            if (isGranted) {
-                //El permiso ha sido concedido, podemos realizar la acción que lo necesitaba
-                openGallery()
-            } else {
-                showDeniedPermissionMessage()
-                requireActivity().finish()
-            }
-        }
 
     private fun openGallery() {
         val intent = Intent(
@@ -275,14 +270,37 @@ class NewAdvertisementFragment : Fragment() {
         intent.type = "image/*"
         imageGalleryLauncher.launch(intent)
     }
+    //endregion --- Photo gallery ---
 
-    private fun showDeniedPermissionMessage() {
-        val message = getString(R.string.new_advertisement_denied_permission)
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    //region --- Others: data validations, strings... ---
+    private fun checkData(title: String, price: Double, description: String): Boolean {
+        var isDataValid = true
+        if (title.isNullOrEmpty()) {
+            isDataValid = false
+            showMessage("Debes poner un título al anuncio")
+        } else if (price <= 0.0) {
+            isDataValid = false
+            showMessage("Necesitas poner un precio al artículo")
+        } else if (description.isNullOrEmpty()) {
+            isDataValid = false
+            showMessage("Debes poner una descripción al anuncio")
+        } else if (uploadedImageUrl == null) {
+            isDataValid = false
+            showMessage("Necesitas subir una foto para el anuncio")
+        }
+        return isDataValid
     }
 
-    private fun showErrorMessageNoImage() {
-        val message = getString(R.string.new_advertisement_no_select_image_error)
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+    private fun getCurrentDate(): String {
+        //Obtenemos la fecha actual
+        val calendar = Calendar.getInstance()
+        // Obtener la hora, minutos y segundos actuales
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        return "$day/$month/$year"
     }
+    //endregion --- Others: data validations, strings... ---
+
 }
