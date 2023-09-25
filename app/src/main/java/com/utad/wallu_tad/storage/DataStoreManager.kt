@@ -1,4 +1,4 @@
-package com.utad.wallu_tad.firebase.storage
+package com.utad.wallu_tad.storage
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,16 +7,17 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.utad.wallu_tad.network.model.responses.UserDataResponse
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "WALLUTAD_STORE")
 
 class DataStoreManager(val context: Context) {
     private val emailKey = "EMAIL"
     private val jwtKey = "JWT"
+    private val userNameKey = "USERNAME"
+    private val fullNameKey = "FULLNAME"
+    private val userIdKey = "USER_ID"
     private val isLoggedKey = "IS_LOGGED"
 
     private suspend fun putString(key: String, value: String) {
@@ -37,12 +38,30 @@ class DataStoreManager(val context: Context) {
         putBoolean(isLoggedKey, true)
     }
 
-    private fun getToken(): String? {
-        var jwt: String? = null
-        context.dataStore.data.map { preferences ->
-            jwt = preferences[stringPreferencesKey(jwtKey)]
-        }
-        return jwt
+    suspend fun saveUserData(user: UserDataResponse) {
+        putString(emailKey, user.email)
+        putString(userIdKey, user.id)
+        putString(fullNameKey, user.fullName)
+        putString(userNameKey, user.userName)
+    }
+
+    suspend fun getToken(): String? {
+        val preferences = context.dataStore.data.first()
+        return preferences[stringPreferencesKey(jwtKey)]
+    }
+
+    suspend fun getUserData(): UserDataResponse? {
+        val preferences = context.dataStore.data.first()
+        val userName = preferences[stringPreferencesKey(userNameKey)] ?: ""
+        val fullName = preferences[stringPreferencesKey(fullNameKey)] ?: ""
+        val email = preferences[stringPreferencesKey(emailKey)] ?: ""
+        val id = preferences[stringPreferencesKey(userIdKey)] ?: ""
+        return UserDataResponse(
+            userName = userName,
+            fullName = fullName,
+            email = email,
+            id = id
+        )
     }
 
     suspend fun isUserLogged(): Boolean {

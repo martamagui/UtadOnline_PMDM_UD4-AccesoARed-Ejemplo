@@ -9,31 +9,49 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.ContactsContract.RawContacts.Data
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.ActivityHomeBinding
+import com.utad.wallu_tad.network.WallUTadApi
 import com.utad.wallu_tad.notifications.NotificationBroadcastReceiver
+import com.utad.wallu_tad.storage.DataStoreManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 import java.util.Calendar
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var _binding: ActivityHomeBinding
     private val binding: ActivityHomeBinding get() = _binding
+    private lateinit var dataStoreManager: DataStoreManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        dataStoreManager = DataStoreManager(this)
         setBottomNavigationView()
-
         showWelcomeNotification()
         //showWelcomeNotificationWithAction()
         scheduleLaterNotification()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val token = dataStoreManager.getToken()
+            if (token != null) {
+                getUserData(token)
+            }
+        }
+
     }
 
     private fun setBottomNavigationView() {
@@ -44,6 +62,26 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    //region ---- Retrofit ----
+    private suspend fun getUserData(jwtToken: String) {
+        val tag = "HomeAct-getUserData"
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = WallUTadApi.service.getUserData("bearer $jwtToken")
+                //Comprobamos si la respuesta fue exitosa
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body() != null) {
+                        dataStoreManager.saveUserData(response.body()!!)
+                    } else {
+                        Log.e(tag, "response.isSuccessful: ${response.isSuccessful}")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(tag, "error: $e")
+            }
+        }
+    }
+    //endregion ---- Retrofit ----
 
     //region ---- Notifications ---
 
@@ -60,8 +98,10 @@ class HomeActivity : AppCompatActivity() {
             intent, //Pasamos el intent de NotificationBroadcastReceiver
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val notificationPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-        val alarmPermission = ActivityCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM)
+        val notificationPermission =
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+        val alarmPermission =
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM)
 
         //Comprobamos que ambos permisos esten concedidos
         if (notificationPermission == PackageManager.PERMISSION_GRANTED &&
@@ -121,4 +161,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     //endregion ---- Notifications ---
+
+
+    //region ---- DataStore ----
+    //endregion ---- DataStore ----
 }

@@ -1,8 +1,6 @@
 package com.utad.wallu_tad.ui.fragments
 
-import android.R
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,11 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.utad.wallu_tad.databinding.FragmentAdvertisementListBinding
 import com.utad.wallu_tad.network.WallUTadApi
-import com.utad.wallu_tad.network.model.Advertisement
+import com.utad.wallu_tad.network.model.responses.Advertisement
 import com.utad.wallu_tad.ui.activities.AdvertisementDetailActivity
 import com.utad.wallu_tad.ui.adapters.AdvertisementListAdapter
 import kotlinx.coroutines.Dispatchers
@@ -58,14 +54,15 @@ class AdvertisementListFragment : Fragment() {
                 //Comprobamos si la respuesta fue exitosa
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-
                         showAds(response.body())
                     } else {
                         showErrorMessage(response.errorBody())
                     }
                 }
             } catch (e: Exception) {
-                showErrorMessage(null)
+                withContext(Dispatchers.Main) {
+                    showErrorMessage(null)
+                }
             }
         }
     }

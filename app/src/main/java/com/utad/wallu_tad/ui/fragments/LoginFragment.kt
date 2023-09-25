@@ -3,7 +3,6 @@ package com.utad.wallu_tad.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +15,9 @@ import com.utad.wallu_tad.databinding.FragmentLoginBinding
 import com.utad.wallu_tad.firebase.authentification.AnonymousAuthenticationManager
 import com.utad.wallu_tad.firebase.authentification.EmailAndPasswordAuthenticationManager
 import com.utad.wallu_tad.network.WallUTadApi
-import com.utad.wallu_tad.network.model.CredentialsBody
-import com.utad.wallu_tad.network.model.TokenResponse
-import com.utad.wallu_tad.firebase.storage.DataStoreManager
+import com.utad.wallu_tad.network.model.body.CredentialsBody
+import com.utad.wallu_tad.network.model.responses.TokenResponse
+import com.utad.wallu_tad.storage.DataStoreManager
 import com.utad.wallu_tad.ui.activities.HomeActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

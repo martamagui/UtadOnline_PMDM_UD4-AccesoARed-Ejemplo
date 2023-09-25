@@ -1,11 +1,13 @@
 package com.utad.wallu_tad.network
 
-import com.utad.wallu_tad.network.model.Advertisement
-import com.utad.wallu_tad.network.model.CredentialsBody
-import com.utad.wallu_tad.network.model.BasicResponse
-import com.utad.wallu_tad.network.model.SaveUserResponse
-import com.utad.wallu_tad.network.model.TokenResponse
-import com.utad.wallu_tad.network.model.UserBody
+import com.utad.wallu_tad.network.model.body.AdvertisementBody
+import com.utad.wallu_tad.network.model.responses.Advertisement
+import com.utad.wallu_tad.network.model.body.CredentialsBody
+import com.utad.wallu_tad.network.model.responses.BasicResponse
+import com.utad.wallu_tad.network.model.responses.SaveUserResponse
+import com.utad.wallu_tad.network.model.responses.TokenResponse
+import com.utad.wallu_tad.network.model.body.UserBody
+import com.utad.wallu_tad.network.model.responses.UserDataResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -19,6 +21,9 @@ interface WallUTadService {
 
     @POST("user")
     fun saveUser(@Body user: UserBody): Call<SaveUserResponse>
+
+    @GET("user")
+    suspend fun getUserData(@Header("Authorization") token: String): Response<UserDataResponse>
 
     @POST("user/login")
     fun login(@Body credentialsBody: CredentialsBody): Call<TokenResponse>
@@ -37,10 +42,10 @@ interface WallUTadService {
     fun getAdvertisementId(@Path("id") id: String): Call<Advertisement>
 
     @POST("create-advertisement")
-    fun createAdvertisement(
+    suspend fun createAdvertisement(
         @Header("Authorization") token: String,
-        @Body credentialsBody: CredentialsBody
-    ): Call<BasicResponse>
+        @Body advertisementBody: AdvertisementBody
+    ): Response<BasicResponse>
 
     //endregion --- Advertisement ---
 }

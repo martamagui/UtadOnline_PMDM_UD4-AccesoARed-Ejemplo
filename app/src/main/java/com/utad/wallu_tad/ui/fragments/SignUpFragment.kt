@@ -12,11 +12,11 @@ import androidx.navigation.fragment.findNavController
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentSignUpBinding
 import com.utad.wallu_tad.firebase.authentification.EmailAndPasswordAuthenticationManager
-import com.utad.wallu_tad.firebase.storage.DataStoreManager
+import com.utad.wallu_tad.storage.DataStoreManager
 import com.utad.wallu_tad.network.WallUTadService
-import com.utad.wallu_tad.network.model.BasicResponse
-import com.utad.wallu_tad.network.model.SaveUserResponse
-import com.utad.wallu_tad.network.model.UserBody
+import com.utad.wallu_tad.network.model.responses.BasicResponse
+import com.utad.wallu_tad.network.model.responses.SaveUserResponse
+import com.utad.wallu_tad.network.model.body.UserBody
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
@@ -118,7 +118,7 @@ class SignUpFragment : Fragment() {
         val email = binding.etSignUpEmail.text.toString().trim()
         val password = binding.etSignUpPassword.text.toString().trim()
         val userName = binding.etUserName.text.toString().trim()
-        val fullName = binding.etUserName.text.toString().trim()
+        val fullName = binding.etSignUpFullName.text.toString().trim()
         val phoneNumber = binding.etSignUpPhone.text.toString().trim().replace(" ", "")
 
         val body = UserBody(

@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/til_sign_up_user_name">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_sign_up_name"
+            android:id="@+id/et_sign_up_full_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"

@@ -1,14 +1,14 @@
-package com.utad.wallu_tad.network.model
+package com.utad.wallu_tad.network.model.responses
 
 import com.google.gson.annotations.SerializedName
 
-data class UserBody(
+data class UserDataResponse(
+    @SerializedName("_id")
+    val id: String,
     @SerializedName("userName")
     val userName: String,
     @SerializedName("fullName")
     val fullName: String,
     @SerializedName("email")
-    val email: String,
-    @SerializedName("password")
-    val password: String
+    val email: String
 )

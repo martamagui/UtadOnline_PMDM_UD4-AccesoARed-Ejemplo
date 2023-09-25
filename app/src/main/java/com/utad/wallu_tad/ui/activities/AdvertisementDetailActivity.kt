@@ -3,13 +3,10 @@ package com.utad.wallu_tad.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
-import com.google.firebase.database.FirebaseDatabase
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.ActivityAdvertisementDetailBinding
 import com.utad.wallu_tad.network.WallUTadApi
-import com.utad.wallu_tad.network.WallUTadService
-import com.utad.wallu_tad.network.model.Advertisement
+import com.utad.wallu_tad.network.model.responses.Advertisement
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

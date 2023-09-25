@@ -1,4 +1,4 @@
-package com.utad.wallu_tad.network.model
+package com.utad.wallu_tad.network.model.responses
 
 import android.os.Message
 import com.google.gson.annotations.SerializedName
