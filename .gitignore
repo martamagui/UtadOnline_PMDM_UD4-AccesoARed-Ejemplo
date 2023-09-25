@@ -66,3 +66,4 @@ google-services.json
 # Others
 secret.properties
 app/src/main/java/com/utad/wallu_tad/key_debug_app_validation
+/app/key_debug_app_validation

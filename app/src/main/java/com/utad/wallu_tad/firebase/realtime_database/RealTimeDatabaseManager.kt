@@ -12,7 +12,7 @@ class RealTimeDatabaseManager {
     fun addFavourite(favourite: FavouriteAdvertisement): FavouriteAdvertisement? {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")". Si quisieramos almacenar
         // más objetos en otras funciones, deberíamos conectarnos a otro child para tener la
-        // información separada. Si el nodo no está creado en la base de datos, lo crea al conectarnos
+        // información separada. Si el nodo no está creado en la base de datos, lo crea al conectarnos.
         val connection = databaseReference.child("faves")
         //Creamos una key
         val key = connection.push().key
@@ -38,7 +38,6 @@ class RealTimeDatabaseManager {
         connection.child(favouriteKey).removeValue()
     }
 
-    //TODO subir cambios en las fotos de la unidad
     fun updateFavourite(favourite: FavouriteAdvertisement) {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")"
         val connection = databaseReference.child("faves")
@@ -48,7 +47,6 @@ class RealTimeDatabaseManager {
         connection.child(favourite.advertisementId).setValue(favourite)
     }
 
-    //TODO subir cambios en las fotos de la unidad
     suspend fun readFavourite(advertisementId: String): FavouriteAdvertisement? {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")"
         val connection = databaseReference.child("faves")

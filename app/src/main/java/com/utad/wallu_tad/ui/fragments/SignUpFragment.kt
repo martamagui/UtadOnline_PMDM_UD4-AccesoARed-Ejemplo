@@ -68,9 +68,7 @@ class SignUpFragment : Fragment() {
     }
     //endregion --- UI Related ---
 
-
     //region --- HTTP Request Related ---
-
 
     private lateinit var networkService: WallUTadService
 
@@ -176,7 +174,7 @@ class SignUpFragment : Fragment() {
             }
         }
     }
-    //region --- Firebase ---
+    //endregion --- Firebase ---
 
     //region --- Data validation ---
     private fun isDataValid(): Boolean {
@@ -187,7 +185,6 @@ class SignUpFragment : Fragment() {
         return email.isNotEmpty() && password.isNotEmpty() && userName.isNotEmpty() && fullName.isNotEmpty()
     }
     //endregion --- Data validation ---
-
 
     //region --- Messages ---
     private fun showWelcomeMessage() {
