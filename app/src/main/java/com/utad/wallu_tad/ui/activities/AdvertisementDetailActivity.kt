@@ -112,22 +112,23 @@ class AdvertisementDetailActivity : AppCompatActivity() {
             advertisement.title
         )
 
+        var favorite = isFavourited
         binding.ivFave.setOnClickListener {
-            if (isFavourited && favourite != null) {
+            if ( favorite  && favourite != null) {
                 val faveKey = favourite?.key
                 if (faveKey != null) {
                     realTimeDBManager.deleteFavourite(faveKey)
                 }
-                setFavouriteIcon(false)
+                favorite  = false
             } else {
                 val newFavourite = realTimeDBManager.addFavourite(favourite!!)
-
                 if (favourite != null) {
                     favourite = newFavourite
                     realTimeDBManager.updateFavourite(favourite!!.copy(title = "LILILIL")!!)
                 }
-                setFavouriteIcon(true)
+                favorite  = true
             }
+            setFavouriteIcon(favorite)
         }
     }
 

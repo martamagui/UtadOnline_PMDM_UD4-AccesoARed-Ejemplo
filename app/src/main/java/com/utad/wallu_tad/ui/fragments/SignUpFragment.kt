@@ -168,7 +168,8 @@ class SignUpFragment : Fragment() {
         //Lanzamos una corrutina para llamar al login
         lifecycleScope.launch(Dispatchers.IO) {
             // Usamos nuestra instancia de la clase para llamar a la función de crear el usuario también en Firebase
-            if (firebaseAuth.signInFirebaseEmailAndPassword(email, password)) {
+            if (firebaseAuth.createUserFirebaseEmailAndPassword(email, password)) {
+                firebaseAuth.signInFirebaseEmailAndPassword(email, password)
                 Log.i("createFirebaseMailAndPasswordUser", "Create user Firebase OK")
             } else {
                 Log.e("createFirebaseMailAndPasswordUser", "Create user Firebase MAL")

@@ -182,10 +182,7 @@ class NewAdvertisementFragment : Fragment() {
                 CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
 
             withContext(Dispatchers.Main) {
-                if (uploadedImageResponse == null) {
-                    Toast.makeText(requireContext(), "Subida de imagen fallida", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
+                if (uploadedImageResponse != null) {
                     //Mostramos la imagen cuando recibamos el link
                     uploadedImageUrl = uploadedImageResponse
                     setImagePreview(uploadedImageResponse)

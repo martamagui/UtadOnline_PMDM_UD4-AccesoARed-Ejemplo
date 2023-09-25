@@ -20,7 +20,7 @@ class RealTimeDatabaseManager {
         if (key != null) {
             //Añadimos a la conexión un objeto hijo con la key que hemos creado
             //y ponemos nuestra dataclass el valor del anuncio marcado como favorito.
-            connection.child("${favourite.advertisementId}").setValue(favourite.)
+            connection.child("${favourite.advertisementId}").setValue(favourite)
             //Si todo ha ido bien, retornamos el objeto con su key
             Log.d("addFavourite", "guardado")
             return favourite.copy(key = key)
