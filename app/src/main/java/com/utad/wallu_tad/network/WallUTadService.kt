@@ -11,6 +11,7 @@ import com.utad.wallu_tad.network.model.responses.UserDataResponse
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -24,6 +25,9 @@ interface WallUTadService {
 
     @GET("user")
     suspend fun getUserData(@Header("Authorization") token: String): Response<UserDataResponse>
+
+    @DELETE("user")
+    suspend fun deleteUser(@Header("Authorization") token: String): Response<UserDataResponse>
 
     @POST("user/login")
     fun login(@Body credentialsBody: CredentialsBody): Call<TokenResponse>

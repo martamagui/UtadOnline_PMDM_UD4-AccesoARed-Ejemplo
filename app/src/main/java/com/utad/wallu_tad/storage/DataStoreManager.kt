@@ -72,4 +72,5 @@ class DataStoreManager(val context: Context) {
     suspend fun logOut() {
         context.dataStore.edit { editor -> editor.clear() }
     }
+
 }

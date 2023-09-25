@@ -1,7 +1,9 @@
-package com.utad.wallu_tad.firebase.db
+package com.utad.wallu_tad.firebase.realtime_database
 
+import android.util.Log
 import com.google.firebase.database.FirebaseDatabase
-import com.utad.wallu_tad.firebase.db.model.FavouriteAdvertisement
+import com.utad.wallu_tad.firebase.realtime_database.model.FavouriteAdvertisement
+import kotlinx.coroutines.tasks.await
 
 class RealTimeDatabaseManager {
 
@@ -18,10 +20,12 @@ class RealTimeDatabaseManager {
         if (key != null) {
             //Añadimos a la conexión un objeto hijo con la key que hemos creado
             //y ponemos nuestra dataclass el valor del anuncio marcado como favorito.
-            connection.child(key).setValue(favourite)
+            connection.child("${favourite.advertisementId}").setValue(favourite.)
             //Si todo ha ido bien, retornamos el objeto con su key
+            Log.d("addFavourite", "guardado")
             return favourite.copy(key = key)
         } else {
+            Log.e("addFavourite", "fallo")
             // Si no hemos podido crear la key retornamos null para saber que no se guardó
             return null
         }
@@ -34,41 +38,37 @@ class RealTimeDatabaseManager {
         connection.child(favouriteKey).removeValue()
     }
 
-    fun updateFavourite(favouriteKey: String, favourite: FavouriteAdvertisement) {
+    //TODO subir cambios en las fotos de la unidad
+    fun updateFavourite(favourite: FavouriteAdvertisement) {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")"
         val connection = databaseReference.child("faves")
-        //Actualizamos este favorito por su key, si os dais cuenta es la misma función
+        //Actualizamos este favorito por su id, si os dais cuenta es la misma función
         // que para crear un nuevo dato. Solo que en este caso el key ya existía
         // previamente y sobreescribimos la información
-        connection.child(favouriteKey).setValue(favourite)
+        connection.child(favourite.advertisementId).setValue(favourite)
     }
 
-    //Con esta notación indicamos que la función puede lanzar una excepción
-    @Throws
-    fun readFavourites(userId: String): List<FavouriteAdvertisement> {
+    //TODO subir cambios en las fotos de la unidad
+    suspend fun readFavourite(advertisementId: String): FavouriteAdvertisement? {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")"
         val connection = databaseReference.child("faves")
-        //Creamos y retornamos un flow que estará constantemente escuchando los cambios en la base de datos
-        val list = mutableListOf<FavouriteAdvertisement>()
-        //Escuchamos la conexión para recoger la lista
-        connection.get().addOnSuccessListener { snapshot ->
-            val faves: MutableList<FavouriteAdvertisement> = mutableListOf()
-            snapshot.children.mapNotNull { dataSnapshot ->
-                //Recogemos cada favorito y le asignamos su key si no son nulos
-                val favourite = snapshot.getValue(FavouriteAdvertisement::class.java)
-                val key = snapshot.key
-                if (key != null && favourite != null) {
-                    favourite.key = key
-                    faves.add(favourite)
-                }
+
+        val snapshot = connection.get()
+        //Esperamos la conexión para recoger la lista
+        snapshot.await()
+
+        snapshot.result.children.mapNotNull { dataSnapshot ->
+            //Recogemos cada favorito y le asignamos su key si no son nulos
+            val favourite = dataSnapshot.getValue(FavouriteAdvertisement::class.java)
+
+            val key = dataSnapshot.key
+            if (key != null && favourite != null && favourite.advertisementId == advertisementId) {
+                //Si encontramos el anuncio que coincida el ID, lo retornamos
+                return favourite
             }
-            //Filtramos la lista por el id del usuario
-            faves.filter { it.userId == userId }
-        }.addOnFailureListener {
-            //Si falla, lanzamos la excepción que recibamos
-            throw it
         }
-        return list
+        //Si NO encontramos el anuncio que coincida el ID, devolvemos un nulo
+        return null
     }
 
 }

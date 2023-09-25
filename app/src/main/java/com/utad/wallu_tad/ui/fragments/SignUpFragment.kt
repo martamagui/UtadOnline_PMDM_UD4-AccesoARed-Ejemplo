@@ -141,7 +141,7 @@ class SignUpFragment : Fragment() {
                 //goToSmsVerification(phoneNumber)
 
                 //Retrocedemos a la vista del login
-                findNavController().popBackStack()
+                parentFragmentManager.popBackStack()
             }
 
             override fun onFailure(call: Call<SaveUserResponse>, t: Throwable) {

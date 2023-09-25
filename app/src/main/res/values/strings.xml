@@ -71,4 +71,10 @@
     <string name="new_advertisement_no_select_image_error">No has seleccionado ninguna imagen</string>
 
 
+    <string name="account_delete_dialog_title">Estás a punto de eliminar tu cuenta</string>
+    <string name="account_delete_dialog_message">¿Estás seguro?</string>
+    <string name="account_delete_positive_button">Sí, quiero eliminar mi cuenta</string>
+    <string name="account_delete_dialog_negative_button">No, lo he pensado mejor</string>
+
+
 </resources>

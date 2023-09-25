@@ -41,7 +41,7 @@ class NewAdvertisementFragment : Fragment() {
     private lateinit var dataStoreManager: DataStoreManager
     private var selectedImageUri: Uri? = null
     private var uploadedImageUrl: String? = null
-    
+
     //region --- Launchers ---
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
