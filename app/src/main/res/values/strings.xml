@@ -35,6 +35,7 @@
     <string name="advertisement_detail_shipping_title">Entrega en 3-7 días</string>
     <string name="advertisement_detail_shipping_pick_up_description">En un punto de recogida <b>desde 7,50€</b></string>
     <string name="advertisement_detail_shipping_home_description">En la puerta de casa desde <b>desde 11,00€</b></string>
+    <string name="advertisement_detail_contact_message">El vendedor no ha propocionado un nº de teléfono.</string>
 
     <string name="new_advertisement_title">En la puerta de casa desde <b>desde 11,00€</b></string>
     <string name="error_message_empty_fields">Por favor, rellena todos los campos.</string>

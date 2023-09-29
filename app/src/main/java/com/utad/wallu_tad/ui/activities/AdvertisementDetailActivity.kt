@@ -40,13 +40,22 @@ class AdvertisementDetailActivity : AppCompatActivity() {
         setClicks()
     }
 
+    //region --- UI related ---
     private fun setClicks() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.btnContactDetail.setOnClickListener {
-            showToast("El vendedor no ha propocionado un nº de teléfono")
+            showToast(getString(R.string.advertisement_detail_contact_message))
         }
     }
 
+    private fun setFavouriteIcon(isFavourited: Boolean) {
+        val icon = if (isFavourited) R.drawable.ic_star else R.drawable.ic_star_border
+        binding.ivFave.setImageResource(icon)
+    }
+
+    //endregion --- UI related ---
+
+    //region --- Retrofit ---
     private fun requireData() {
         val advertisementId = intent.extras?.getString("advertisementId")
         if (advertisementId != null) {
@@ -70,7 +79,10 @@ class AdvertisementDetailActivity : AppCompatActivity() {
 
         }
     }
+    //endregion --- Retrofit ---
 
+
+    //region --- Firebase ---
     private fun setAdvertisementData(advertisement: Advertisement) {
         Glide.with(binding.ivProduct).load(advertisement.image)
             .centerCrop()
@@ -144,16 +156,13 @@ class AdvertisementDetailActivity : AppCompatActivity() {
     private fun updateFavourite(newTitle: String, favourite: FavouriteAdvertisement) {
         realTimeDBManager.updateFavourite(favourite.copy(title = newTitle))
     }
+    //endregion --- Firebase ---
 
 
-    private fun setFavouriteIcon(isFavourited: Boolean) {
-        val icon = if (isFavourited) R.drawable.ic_star else R.drawable.ic_star_border
-        binding.ivFave.setImageResource(icon)
-    }
-
+    //region --- Message ---
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
+    //endregion --- Message ---
 
 }
