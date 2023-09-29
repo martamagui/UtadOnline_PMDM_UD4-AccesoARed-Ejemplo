@@ -9,7 +9,9 @@ object WallUTadApi {
     private val interceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
-    private val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(interceptor)
+        .build()
 
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://ud4-server.onrender.com/api/v1/")//El url base siempre debe acabar en /

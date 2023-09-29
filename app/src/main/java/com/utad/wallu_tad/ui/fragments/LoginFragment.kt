@@ -125,8 +125,14 @@ class LoginFragment : BottomSheetDialogFragment() {
             if (firebaseAuth.signInFirebaseEmailAndPassword(email, password)) {
                 Log.i("Loginfirebase", "Login mail y constraseña de Firebase OK")
                 //Cómo el login fue bien, vamos a la home
-                navigateToHome()
+                withContext(Dispatchers.Main) {
+                    navigateToHome()
+                }
             } else {
+                withContext(Dispatchers.Main) {
+                    val message = getString(R.string.login_sign_up_firebase_error)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                }
                 Log.e("Loginfirebase", "Login mail y constraseña de Firebase MAL")
             }
         }

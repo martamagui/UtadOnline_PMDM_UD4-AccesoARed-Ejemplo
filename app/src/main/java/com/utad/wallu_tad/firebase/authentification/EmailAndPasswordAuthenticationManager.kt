@@ -1,6 +1,7 @@
 package com.utad.wallu_tad.firebase.authentification
 
 import android.util.Log
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -31,16 +32,22 @@ class EmailAndPasswordAuthenticationManager {
     }
 
     suspend fun signInFirebaseEmailAndPassword(email: String, password: String): Boolean {
-        val result = auth.signInWithEmailAndPassword(email, password)
-        //Esperamos el resulta del login
-        result.await()
-        if (result.isSuccessful) {
-            Log.d("FirebaseAuth", "signInFirebaseEmailAndPassword:success")
-            return true
-        } else {
-            Log.d("FirebaseAuth", "signInFirebaseEmailAndPassword:failure", result.exception)
+        try {
+            val result = auth.signInWithEmailAndPassword(email, password)
+            //Esperamos el resulta del login
+            result.await()
+            if (result.isSuccessful) {
+                Log.d("FirebaseAuth", "signInFirebaseEmailAndPassword:success")
+                return true
+            } else {
+                Log.d("FirebaseAuth", "signInFirebaseEmailAndPassword:failure", result.exception)
+                return false
+            }
+        }catch (e: FirebaseException){
+            Log.e("FirebaseAuth", "signInFirebaseEmailAndPassword:failure", e)
             return false
         }
+
     }
 
 

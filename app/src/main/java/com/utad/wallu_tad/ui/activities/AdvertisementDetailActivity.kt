@@ -3,6 +3,7 @@ package com.utad.wallu_tad.ui.activities
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.utad.wallu_tad.R
@@ -42,7 +43,7 @@ class AdvertisementDetailActivity : AppCompatActivity() {
     private fun setClicks() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.btnContactDetail.setOnClickListener {
-            //TODO mostrar un mensaje de contactar con el vendedor
+            showToast("El vendedor no ha propocionado un nº de teléfono")
         }
     }
 
@@ -58,13 +59,12 @@ class AdvertisementDetailActivity : AppCompatActivity() {
                         if (response.body() != null) {
                             setAdvertisementData(response.body()!!)
                         } else {
-                            //TODO hacer el mensaje de error
+                            showToast("Error en la llamada")
                         }
                     }
 
                     override fun onFailure(call: Call<Advertisement>, t: Throwable) {
-                        //TODO hacer el mensaje de error
-
+                        showToast("Error en la llamada")
                     }
                 })
 
@@ -82,6 +82,10 @@ class AdvertisementDetailActivity : AppCompatActivity() {
         binding.tvDetailTitle.text = advertisement.title
         binding.tvSellerName.text = getString(R.string.detail_seller, advertisement.userName)
 
+        checkIsFavourited(advertisement)
+    }
+
+    private fun checkIsFavourited(advertisement: Advertisement) {
         lifecycleScope.launch(Dispatchers.IO) {
             val user = dataStoreManager.getUserData()
             var isFavourited = false
@@ -105,36 +109,50 @@ class AdvertisementDetailActivity : AppCompatActivity() {
         advertisement: Advertisement,
     ) {
         setFavouriteIcon(isFavourited)
-        var favourite: FavouriteAdvertisement? = FavouriteAdvertisement(
+        var favourite = FavouriteAdvertisement(
             null,
             user.id!!,
             advertisement.id,
             advertisement.title
         )
 
-        var favorite = isFavourited
+        var stillFavorutited = isFavourited
         binding.ivFave.setOnClickListener {
-            if ( favorite  && favourite != null) {
-                val faveKey = favourite?.key
-                if (faveKey != null) {
-                    realTimeDBManager.deleteFavourite(faveKey)
+            if (stillFavorutited) {
+                val favouriteId = favourite?.key
+                if (favouriteId != null) {
+                    realTimeDBManager.deleteFavourite(favouriteId)
                 }
-                favorite  = false
+                setFavouriteIcon(false)
+                stillFavorutited = false
             } else {
-                val newFavourite = realTimeDBManager.addFavourite(favourite!!)
-                if (favourite != null) {
-                    favourite = newFavourite
-                    realTimeDBManager.updateFavourite(favourite!!.copy(title = "LILILIL")!!)
-                }
-                favorite  = true
+                addFavourite(favourite)
+                stillFavorutited = true
             }
-            setFavouriteIcon(favorite)
         }
     }
+
+    private fun addFavourite(favourite: FavouriteAdvertisement) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val newFavourite = realTimeDBManager.addFavourite(favourite!!)
+            withContext(Dispatchers.Main) {
+                setFavouriteIcon(newFavourite != null)
+            }
+        }
+    }
+
+    private fun updateFavourite(newTitle: String, favourite: FavouriteAdvertisement) {
+        realTimeDBManager.updateFavourite(favourite.copy(title = newTitle))
+    }
+
 
     private fun setFavouriteIcon(isFavourited: Boolean) {
         val icon = if (isFavourited) R.drawable.ic_star else R.drawable.ic_star_border
         binding.ivFave.setImageResource(icon)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 

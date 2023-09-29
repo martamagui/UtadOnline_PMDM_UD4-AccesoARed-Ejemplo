@@ -8,6 +8,7 @@
     <string name="login_password_hint">Contraseña</string>
     <string name="login_button_description">Acceder a WallU-Tad</string>
     <string name="login_sign_up_button_description">Todavía no tengo cuenta</string>
+    <string name="login_sign_up_firebase_error">Ha ocurrido un error al acreditarte en Firebase</string>
 
     <string name="sign_up_title">Súmate a Wallu-Tad</string>
     <string name="sign_up_name_hint">Nombre y apellidos</string>

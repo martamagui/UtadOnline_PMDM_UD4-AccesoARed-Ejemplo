@@ -9,7 +9,7 @@ class RealTimeDatabaseManager {
 
     private val databaseReference = FirebaseDatabase.getInstance().reference
 
-    fun addFavourite(favourite: FavouriteAdvertisement): FavouriteAdvertisement? {
+    suspend fun addFavourite(favourite: FavouriteAdvertisement): FavouriteAdvertisement? {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")". Si quisieramos almacenar
         // más objetos en otras funciones, deberíamos conectarnos a otro child para tener la
         // información separada. Si el nodo no está creado en la base de datos, lo crea al conectarnos.
@@ -18,12 +18,14 @@ class RealTimeDatabaseManager {
         val key = connection.push().key
         //Si no es nula, guardamos el anuncio en favoritos
         if (key != null) {
+            //Hacemos una copia del favorito asignándole la key
+            val favouriteWithKey = favourite.copy(key=key)
             //Añadimos a la conexión un objeto hijo con la key que hemos creado
             //y ponemos nuestra dataclass el valor del anuncio marcado como favorito.
-            connection.child("${favourite.advertisementId}").setValue(favourite)
+            connection.child("${favourite.advertisementId}").setValue(favouriteWithKey).await()
             //Si todo ha ido bien, retornamos el objeto con su key
             Log.d("addFavourite", "guardado")
-            return favourite.copy(key = key)
+            return favouriteWithKey
         } else {
             Log.e("addFavourite", "fallo")
             // Si no hemos podido crear la key retornamos null para saber que no se guardó
@@ -31,11 +33,12 @@ class RealTimeDatabaseManager {
         }
     }
 
-    fun deleteFavourite(favouriteKey: String) {
+    fun deleteFavourite(favouriteId: String) {
         //Nos conectamos la nodo de "faves" mediante ".child("faves")"
         val connection = databaseReference.child("faves")
-        //Borramos este favorito por su key
-        connection.child(favouriteKey).removeValue()
+        //Borramos este favorito por su id
+        connection.child(favouriteId).removeValue()
+        Log.i("Fave", "Borrado")
     }
 
     fun updateFavourite(favourite: FavouriteAdvertisement) {
@@ -58,9 +61,8 @@ class RealTimeDatabaseManager {
         snapshot.result.children.mapNotNull { dataSnapshot ->
             //Recogemos cada favorito y le asignamos su key si no son nulos
             val favourite = dataSnapshot.getValue(FavouriteAdvertisement::class.java)
-
-            val key = dataSnapshot.key
-            if (key != null && favourite != null && favourite.advertisementId == advertisementId) {
+            Log.i("Fave", "$favourite")
+            if (favourite != null && favourite.advertisementId == advertisementId) {
                 //Si encontramos el anuncio que coincida el ID, lo retornamos
                 return favourite
             }
