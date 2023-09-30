@@ -26,7 +26,7 @@ class EmailAndPasswordAuthenticationManager {
             Log.d("FirebaseAuth", "createUserFirebaseEmailAndPassword:success")
             return true
         } else {
-            Log.d("FirebaseAuth", "createUserFirebaseEmailAndPassword:failure", result.exception)
+            Log.e("FirebaseAuth", "createUserFirebaseEmailAndPassword:failure", result.exception)
             return false
         }
     }
@@ -43,17 +43,14 @@ class EmailAndPasswordAuthenticationManager {
                 Log.d("FirebaseAuth", "signInFirebaseEmailAndPassword:failure", result.exception)
                 return false
             }
-        }catch (e: FirebaseException){
+        } catch (e: FirebaseException) {
             Log.e("FirebaseAuth", "signInFirebaseEmailAndPassword:failure", e)
             return false
         }
-
     }
-
 
     fun signOut() {
         auth.signOut()
     }
-
 
 }

@@ -42,6 +42,8 @@ class NewAdvertisementFragment : Fragment() {
     private var selectedImageUri: Uri? = null
     private var uploadedImageUrl: String? = null
 
+    private lateinit var cloudStorageManager: CloudStorageManager
+
     //region --- Launchers ---
     private val requestPermissionLauncher: ActivityResultLauncher<String> =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
@@ -82,10 +84,11 @@ class NewAdvertisementFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         dataStoreManager = DataStoreManager(requireContext())
+        cloudStorageManager = CloudStorageManager()
         setClicks()
     }
 
-    //region --- UI RElated ---
+    //region --- UI Related ---
     private fun setClicks() {
         binding.ivSlectedImagePreview.setImageDrawable(
             resources.getDrawable(
@@ -102,7 +105,6 @@ class NewAdvertisementFragment : Fragment() {
         }
         binding.btnNewAdd.setOnClickListener { createNewAdd() }
     }
-
 
     private fun setImagePreview(uploadedImageResponse: String) {
         Glide.with(binding.ivSlectedImagePreview).load(uploadedImageResponse)
@@ -176,10 +178,10 @@ class NewAdvertisementFragment : Fragment() {
     //endregion --- Retrofit ---
 
     //region --- Firebase - CloudStorage ---
+
     private fun uploadImage(selectedImageUri: Uri?) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val uploadedImageResponse =
-                CloudStorageManager().uploadAdvertisementImage(selectedImageUri!!)
+            val uploadedImageResponse = cloudStorageManager.uploadAdvertisementImage(selectedImageUri!!)
 
             withContext(Dispatchers.Main) {
                 if (uploadedImageResponse != null) {

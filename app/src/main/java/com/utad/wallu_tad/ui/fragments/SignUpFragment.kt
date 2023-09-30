@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.utad.wallu_tad.R
 import com.utad.wallu_tad.databinding.FragmentSignUpBinding
 import com.utad.wallu_tad.firebase.authentification.EmailAndPasswordAuthenticationManager
@@ -162,11 +161,11 @@ class SignUpFragment : Fragment() {
     private fun createFirebaseMailAndPasswordUser(email: String, password: String) {
         //Instanciamos nuestra clase para poder usarla
         val firebaseAuth = EmailAndPasswordAuthenticationManager()
-
         //Lanzamos una corrutina para llamar al login
         lifecycleScope.launch(Dispatchers.IO) {
             // Usamos nuestra instancia de la clase para llamar a la función de crear el usuario también en Firebase
-            if (firebaseAuth.createUserFirebaseEmailAndPassword(email, password)) {
+            val resultIsSuccessful = firebaseAuth.createUserFirebaseEmailAndPassword(email, password)
+            if (resultIsSuccessful) {
                 firebaseAuth.signInFirebaseEmailAndPassword(email, password)
                 Log.i("createFirebaseMailAndPasswordUser", "Create user Firebase OK")
             } else {

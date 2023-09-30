@@ -53,6 +53,19 @@ class AdvertisementDetailActivity : AppCompatActivity() {
         binding.ivFave.setImageResource(icon)
     }
 
+    private fun setAdvertisementData(advertisement: Advertisement) {
+        Glide.with(binding.ivProduct).load(advertisement.image)
+            .centerCrop()
+            .placeholder(R.drawable.bg_divider)
+            .into(binding.ivProduct)
+
+        binding.tvDescriptionDetail.text = advertisement.description
+        binding.tvDetailPrice.text = "${advertisement.price} €"
+        binding.tvDetailTitle.text = advertisement.title
+        binding.tvSellerName.text = getString(R.string.detail_seller, advertisement.userName)
+
+        checkIsFavourited(advertisement)
+    }
     //endregion --- UI related ---
 
     //region --- Retrofit ---
@@ -83,21 +96,7 @@ class AdvertisementDetailActivity : AppCompatActivity() {
 
 
     //region --- Firebase ---
-    private fun setAdvertisementData(advertisement: Advertisement) {
-        Glide.with(binding.ivProduct).load(advertisement.image)
-            .centerCrop()
-            .placeholder(R.drawable.bg_divider)
-            .into(binding.ivProduct)
-
-        binding.tvDescriptionDetail.text = advertisement.description
-        binding.tvDetailPrice.text = "${advertisement.price} €"
-        binding.tvDetailTitle.text = advertisement.title
-        binding.tvSellerName.text = getString(R.string.detail_seller, advertisement.userName)
-
-        checkIsFavourited(advertisement)
-    }
-
-    private fun checkIsFavourited(advertisement: Advertisement) {
+      private fun checkIsFavourited(advertisement: Advertisement) {
         lifecycleScope.launch(Dispatchers.IO) {
             val user = dataStoreManager.getUserData()
             var isFavourited = false
