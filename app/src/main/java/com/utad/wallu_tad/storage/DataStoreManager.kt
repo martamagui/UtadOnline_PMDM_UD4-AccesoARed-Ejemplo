@@ -10,9 +10,12 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.utad.wallu_tad.network.model.responses.UserDataResponse
 import kotlinx.coroutines.flow.first
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "WALLUTAD_STORE")
 
 class DataStoreManager(val context: Context) {
+
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "WALLUTAD_STORE")
+
+
     private val emailKey = "EMAIL"
     private val jwtKey = "JWT"
     private val userNameKey = "USERNAME"
